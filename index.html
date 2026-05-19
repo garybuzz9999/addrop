@@ -730,10 +730,10 @@
       <section>
         <h2 class="section-title">Чому AdDrop?</h2>
         <div class="advantages">
-          <div class="advantage">🚀 Без посередників</div>
-          <div class="advantage">📍 Звіт із геолокацією</div>
-          <div class="advantage">⭐ Друкарська продукція</div>
-          <div class="advantage">⚡ Швидкий запуск кампаній</div>
+          <div class="advantage" onclick="openAdvModal('no-middlemen')" style="cursor:pointer;">🚀 Без посередників</div>
+          <div class="advantage" onclick="openAdvModal('geo-report')" style="cursor:pointer;">📍 Звіт із геолокацією</div>
+          <div class="advantage" onclick="openAdvModal('print')" style="cursor:pointer;">⭐ Друкарська продукція</div>
+          <div class="advantage" onclick="openAdvModal('fast-launch')" style="cursor:pointer;">⚡ Швидкий запуск кампаній</div>
         </div>
       </section>
 
@@ -1112,6 +1112,278 @@
         Завантаження...
       </div>
       <div id="adminUsersList" style="margin-top:16px;"></div>
+    </div>
+  </div>
+
+  <!-- ========== МОДАЛКИ ПЕРЕВАГ ========== -->
+
+  <!-- 1. Без посередників -->
+  <div class="modal-overlay" id="modal-no-middlemen">
+    <div class="modal" style="max-width:520px;max-height:85vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <h3>🚀 Без посередників</h3>
+        <button onclick="closeAdvModal('no-middlemen')" style="background:none;border:none;color:#888;font-size:1.8rem;cursor:pointer;">✕</button>
+      </div>
+
+      <!-- Порівняння -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+        <div style="background:#1a1a1a;border-radius:16px;padding:16px;border:1px solid #ff453a44;">
+          <div style="color:#ff453a;font-weight:800;margin-bottom:12px;font-size:0.9rem;">❌ АГЕНТСТВО</div>
+          <div style="font-size:0.85rem;color:#aaa;line-height:2;">
+            <div>Бюджет: <b style="color:white;">5000 грн</b></div>
+            <div>Комісія: <b style="color:#ff453a;">-2000 грн</b></div>
+            <div>Менеджер: <b style="color:#ff453a;">-500 грн</b></div>
+            <div>Виконавцю: <b style="color:#ff453a;">2500 грн</b></div>
+            <div style="margin-top:8px;padding-top:8px;border-top:1px solid #333;">Ви втрачаєте <b style="color:#ff453a;">50%</b></div>
+          </div>
+        </div>
+        <div style="background:#1a1a1a;border-radius:16px;padding:16px;border:1px solid #4cd96444;">
+          <div style="color:#4cd964;font-weight:800;margin-bottom:12px;font-size:0.9rem;">✅ ADDROP</div>
+          <div style="font-size:0.85rem;color:#aaa;line-height:2;">
+            <div>Бюджет: <b style="color:white;">5000 грн</b></div>
+            <div>Сервіс: <b style="color:#4cd964;">-250 грн</b></div>
+            <div>&nbsp;</div>
+            <div>Виконавцю: <b style="color:#4cd964;">4750 грн</b></div>
+            <div style="margin-top:8px;padding-top:8px;border-top:1px solid #333;">Ви економите <b style="color:#4cd964;">95%</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,rgba(255,94,0,0.15),rgba(255,30,30,0.1));border-radius:16px;padding:16px;margin-bottom:16px;">
+        <div style="font-weight:800;margin-bottom:10px;">Як це працює:</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:0.9rem;color:#ccc;">
+          <div>👤 Ви — розміщуєте завдання напряму</div>
+          <div>🙋 Роздавальник — бачить і бере завдання</div>
+          <div>💰 Оплата — напряму між вами</div>
+          <div>📊 AdDrop — тільки платформа, без накруток</div>
+        </div>
+      </div>
+
+      <button onclick="closeAdvModal('no-middlemen');wizardOpen();" style="width:100%;background:linear-gradient(135deg,var(--orange),var(--red));border:none;color:white;padding:16px;border-radius:14px;font-weight:800;font-size:1rem;cursor:pointer;font-family:'Montserrat',sans-serif;">
+        🚀 Спробувати зараз
+      </button>
+    </div>
+  </div>
+
+  <!-- 2. Звіт із геолокацією -->
+  <div class="modal-overlay" id="modal-geo-report">
+    <div class="modal" style="max-width:520px;max-height:85vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <h3>📍 Звіт із геолокацією</h3>
+        <button onclick="closeAdvModal('geo-report')" style="background:none;border:none;color:#888;font-size:1.8rem;cursor:pointer;">✕</button>
+      </div>
+
+      <!-- Макет звіту -->
+      <div style="background:#1a1a1a;border-radius:20px;padding:20px;margin-bottom:16px;border:1px solid #333;">
+        <div style="font-size:0.8rem;color:#666;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;">📋 Приклад звіту роздавальника</div>
+
+        <!-- Фото-заглушка -->
+        <div style="background:linear-gradient(135deg,#222,#2a2a2a);border-radius:14px;height:160px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;position:relative;overflow:hidden;">
+          <div style="text-align:center;">
+            <div style="font-size:3rem;">📸</div>
+            <div style="font-size:0.85rem;color:#555;margin-top:8px;">Фото з місця роздачі</div>
+          </div>
+          <!-- GPS бейдж -->
+          <div style="position:absolute;bottom:10px;left:10px;background:rgba(0,0,0,0.8);border-radius:8px;padding:6px 10px;font-size:0.75rem;color:#4cd964;">
+            📍 50.4501° N, 30.5234° E
+          </div>
+          <div style="position:absolute;top:10px;right:10px;background:rgba(0,200,0,0.2);border:1px solid #4cd964;border-radius:8px;padding:4px 10px;font-size:0.75rem;color:#4cd964;">
+            ✅ Верифіковано
+          </div>
+        </div>
+
+        <!-- Деталі звіту -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.85rem;">
+          <div style="background:#222;border-radius:10px;padding:10px;">
+            <div style="color:#666;font-size:0.75rem;">ЧАС</div>
+            <div style="color:white;font-weight:700;margin-top:4px;">14:32 — 17:15</div>
+          </div>
+          <div style="background:#222;border-radius:10px;padding:10px;">
+            <div style="color:#666;font-size:0.75rem;">РОЗДАНО</div>
+            <div style="color:var(--orange);font-weight:700;margin-top:4px;">487 / 500 шт</div>
+          </div>
+          <div style="background:#222;border-radius:10px;padding:10px;">
+            <div style="color:#666;font-size:0.75rem;">ЛОКАЦІЯ</div>
+            <div style="color:white;font-weight:700;margin-top:4px;">м. Хрещатик</div>
+          </div>
+          <div style="background:#222;border-radius:10px;padding:10px;">
+            <div style="color:#666;font-size:0.75rem;">СТАТУС</div>
+            <div style="color:#4cd964;font-weight:700;margin-top:4px;">✅ Виконано</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;padding:10px;background:#222;border-radius:10px;font-size:0.85rem;color:#aaa;">
+          💬 "Роздав біля виходу №2, пік активності 15:00–16:30. Залишок 13 шт здав замовнику."
+        </div>
+      </div>
+
+      <div style="font-size:0.9rem;color:#aaa;line-height:1.8;margin-bottom:16px;">
+        <div>📸 Фото з геотегом — не можна підробити</div>
+        <div>🕐 Точний час початку і кінця роздачі</div>
+        <div>📦 Лічильник розданих матеріалів</div>
+        <div>💬 Коментар виконавця</div>
+      </div>
+
+      <button onclick="closeAdvModal('geo-report');wizardOpen();" style="width:100%;background:linear-gradient(135deg,var(--orange),var(--red));border:none;color:white;padding:16px;border-radius:14px;font-weight:800;font-size:1rem;cursor:pointer;font-family:'Montserrat',sans-serif;">
+        📍 Замовити з фото-звітом
+      </button>
+    </div>
+  </div>
+
+  <!-- 3. Друкарська продукція -->
+  <div class="modal-overlay" id="modal-print">
+    <div class="modal" style="max-width:520px;max-height:85vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <h3>⭐ Друкарська продукція</h3>
+        <button onclick="closeAdvModal('print')" style="background:none;border:none;color:#888;font-size:1.8rem;cursor:pointer;">✕</button>
+      </div>
+
+      <div style="font-size:0.9rem;color:#aaa;margin-bottom:16px;">Замовляй друк разом з роздачею — отримуй знижку та економ час</div>
+
+      <!-- Приклади продукції -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+
+        <div style="background:#1a1a1a;border-radius:16px;padding:16px;border:1px solid #333;">
+          <div style="background:linear-gradient(135deg,#FF5E00,#ff1e1e);border-radius:10px;height:80px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+            <div style="text-align:center;">
+              <div style="font-size:1.5rem;">📄</div>
+              <div style="font-size:0.7rem;color:rgba(255,255,255,0.8);margin-top:4px;">A5 / A4</div>
+            </div>
+          </div>
+          <div style="font-weight:800;margin-bottom:4px;">Флаєр</div>
+          <div style="font-size:0.8rem;color:#888;">від 0.8 грн/шт</div>
+          <div style="font-size:0.75rem;color:#555;margin-top:6px;">500 шт від 400 грн</div>
+        </div>
+
+        <div style="background:#1a1a1a;border-radius:16px;padding:16px;border:1px solid #333;">
+          <div style="background:linear-gradient(135deg,#1a3a5c,#2a5f7a);border-radius:10px;height:80px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+            <div style="text-align:center;">
+              <div style="font-size:1.5rem;">🪪</div>
+              <div style="font-size:0.7rem;color:rgba(255,255,255,0.8);margin-top:4px;">90×50 мм</div>
+            </div>
+          </div>
+          <div style="font-weight:800;margin-bottom:4px;">Візитка</div>
+          <div style="font-size:0.8rem;color:#888;">від 0.5 грн/шт</div>
+          <div style="font-size:0.75rem;color:#555;margin-top:6px;">1000 шт від 500 грн</div>
+        </div>
+
+        <div style="background:#1a1a1a;border-radius:16px;padding:16px;border:1px solid #333;">
+          <div style="background:linear-gradient(135deg,#1a4a1a,#2a7a2a);border-radius:10px;height:80px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+            <div style="text-align:center;">
+              <div style="font-size:1.5rem;">🏷️</div>
+              <div style="font-size:0.7rem;color:rgba(255,255,255,0.8);margin-top:4px;">різні розміри</div>
+            </div>
+          </div>
+          <div style="font-weight:800;margin-bottom:4px;">Наклейка</div>
+          <div style="font-size:0.8rem;color:#888;">від 1.2 грн/шт</div>
+          <div style="font-size:0.75rem;color:#555;margin-top:6px;">300 шт від 360 грн</div>
+        </div>
+
+        <div style="background:#1a1a1a;border-radius:16px;padding:16px;border:1px solid #333;">
+          <div style="background:linear-gradient(135deg,#3a1a5c,#6a2a9a);border-radius:10px;height:80px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+            <div style="text-align:center;">
+              <div style="font-size:1.5rem;">🗞️</div>
+              <div style="font-size:0.7rem;color:rgba(255,255,255,0.8);margin-top:4px;">A3 / A2</div>
+            </div>
+          </div>
+          <div style="font-weight:800;margin-bottom:4px;">Листівка</div>
+          <div style="font-size:0.8rem;color:#888;">від 2 грн/шт</div>
+          <div style="font-size:0.75rem;color:#555;margin-top:6px;">200 шт від 400 грн</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(255,94,0,0.1);border:1px solid rgba(255,94,0,0.3);border-radius:14px;padding:14px;margin-bottom:16px;font-size:0.9rem;">
+        🎁 <b>Замовляй друк + роздачу разом</b> — отримуй знижку 10% на друк
+      </div>
+
+      <button onclick="closeAdvModal('print');wizardOpen();" style="width:100%;background:linear-gradient(135deg,var(--orange),var(--red));border:none;color:white;padding:16px;border-radius:14px;font-weight:800;font-size:1rem;cursor:pointer;font-family:'Montserrat',sans-serif;">
+        ⭐ Замовити друк + роздачу
+      </button>
+    </div>
+  </div>
+
+  <!-- 4. Швидкий запуск -->
+  <div class="modal-overlay" id="modal-fast-launch">
+    <div class="modal" style="max-width:520px;max-height:85vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <h3>⚡ Швидкий запуск кампаній</h3>
+        <button onclick="closeAdvModal('fast-launch')" style="background:none;border:none;color:#888;font-size:1.8rem;cursor:pointer;">✕</button>
+      </div>
+
+      <!-- Таймлайн -->
+      <div style="margin-bottom:20px;">
+        <div style="font-size:0.85rem;color:#666;margin-bottom:14px;text-transform:uppercase;letter-spacing:1px;">⏱ Від ідеї до старту за 1 день</div>
+
+        <div style="display:flex;flex-direction:column;gap:0;">
+
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="display:flex;flex-direction:column;align-items:center;">
+              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--red));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;flex-shrink:0;">1</div>
+              <div style="width:2px;height:40px;background:#333;margin-top:4px;"></div>
+            </div>
+            <div style="padding-top:6px;padding-bottom:20px;">
+              <div style="font-weight:800;">Заповнив форму</div>
+              <div style="font-size:0.85rem;color:#888;margin-top:4px;">Описав завдання за 5 хвилин через wizard</div>
+              <div style="font-size:0.8rem;color:var(--orange);margin-top:4px;">⏱ 5 хвилин</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="display:flex;flex-direction:column;align-items:center;">
+              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--red));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;flex-shrink:0;">2</div>
+              <div style="width:2px;height:40px;background:#333;margin-top:4px;"></div>
+            </div>
+            <div style="padding-top:6px;padding-bottom:20px;">
+              <div style="font-weight:800;">Роздавальник знайдений</div>
+              <div style="font-size:0.85rem;color:#888;margin-top:4px;">Виконавець у твоєму районі бере завдання</div>
+              <div style="font-size:0.8rem;color:var(--orange);margin-top:4px;">⏱ до 2 годин</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="display:flex;flex-direction:column;align-items:center;">
+              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--red));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;flex-shrink:0;">3</div>
+              <div style="width:2px;height:40px;background:#333;margin-top:4px;"></div>
+            </div>
+            <div style="padding-top:6px;padding-bottom:20px;">
+              <div style="font-weight:800;">Погодження деталей</div>
+              <div style="font-size:0.85rem;color:#888;margin-top:4px;">Прямий контакт з виконавцем, уточнення умов</div>
+              <div style="font-size:0.8rem;color:var(--orange);margin-top:4px;">⏱ 15 хвилин</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="display:flex;flex-direction:column;align-items:center;">
+              <div style="width:36px;height:36px;border-radius:50%;background:#4cd964;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;flex-shrink:0;">✓</div>
+            </div>
+            <div style="padding-top:6px;">
+              <div style="font-weight:800;color:#4cd964;">Кампанія запущена!</div>
+              <div style="font-size:0.85rem;color:#888;margin-top:4px;">Роздача розпочата, звіти надходять в реальному часі</div>
+              <div style="font-size:0.8rem;color:#4cd964;margin-top:4px;">⏱ Того ж дня</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;text-align:center;">
+        <div style="background:#1a1a1a;border-radius:12px;padding:12px;">
+          <div style="font-size:1.5rem;font-weight:900;color:var(--orange);">5</div>
+          <div style="font-size:0.75rem;color:#888;">хвилин на старт</div>
+        </div>
+        <div style="background:#1a1a1a;border-radius:12px;padding:12px;">
+          <div style="font-size:1.5rem;font-weight:900;color:var(--orange);">24/7</div>
+          <div style="font-size:0.75rem;color:#888;">доступність</div>
+        </div>
+        <div style="background:#1a1a1a;border-radius:12px;padding:12px;">
+          <div style="font-size:1.5rem;font-weight:900;color:var(--orange);">0</div>
+          <div style="font-size:0.75rem;color:#888;">зайвих дзвінків</div>
+        </div>
+      </div>
+
+      <button onclick="closeAdvModal('fast-launch');wizardOpen();" style="width:100%;background:linear-gradient(135deg,var(--orange),var(--red));border:none;color:white;padding:16px;border-radius:14px;font-weight:800;font-size:1rem;cursor:pointer;font-family:'Montserrat',sans-serif;">
+        ⚡ Запустити кампанію
+      </button>
     </div>
   </div>
 
@@ -1666,6 +1938,16 @@
     // Ініціалізація
     if(currentWorker){ updateUIByWorkerAuth(); }
     else { updateUIByAuth(); }
+
+    // ========== МОДАЛКИ ПЕРЕВАГ ==========
+    function openAdvModal(id){
+      openModal(document.getElementById('modal-'+id));
+    }
+    function closeAdvModal(id){
+      closeModal(document.getElementById('modal-'+id));
+    }
+    window.openAdvModal = openAdvModal;
+    window.closeAdvModal = closeAdvModal;
 
     // Google/Apple заглушки
     document.getElementById('googleBtn').onclick = () => alert('🔵 Google вхід буде доступний у наступній версії');
