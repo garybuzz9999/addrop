@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AdDrop — Реклама, яка розходиться в руки</title>
+  <title>FlyerDrop — Реклама, яка розходиться в руки</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -679,7 +679,7 @@
         <span></span>
         <span></span>
       </label>
-      <div class="logo">AdDrop</div>
+      <div class="logo">FlyerDrop</div>
     </div>
     <div class="header-btns">
       <button class="login-btn" id="loginBtn">Замовник</button>
@@ -690,7 +690,7 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-content">
-      <h1><span>AdDrop</span> — Реклама, яка розходиться в руки</h1>
+      <h1><span>FlyerDrop</span> — Реклама, яка розходиться в руки</h1>
       <p>Флаєри, акції, пробники, друк — підберемо роздавальників за 5 хвилин. Запускай рекламні кампанії швидко, агресивно та без зайвих посередників.</p>
       <button class="cta-btn" id="ctaBtn">Створити завдання</button>
     </div>
@@ -728,7 +728,7 @@
       </section>
 
       <section>
-        <h2 class="section-title">Чому AdDrop?</h2>
+        <h2 class="section-title">Чому FlyerDrop?</h2>
         <div class="advantages">
           <div class="advantage" onclick="openAdvModal('no-middlemen')" style="cursor:pointer;">🚀 Без посередників</div>
           <div class="advantage" onclick="openAdvModal('geo-report')" style="cursor:pointer;">📍 Звіт із геолокацією</div>
@@ -1158,7 +1158,7 @@
           <div style="font-size:2rem;flex-shrink:0;">🤝</div>
           <div>
             <div style="font-weight:800;margin-bottom:4px;">Чесна угода</div>
-            <div style="font-size:0.9rem;color:#aaa;line-height:1.5;">AdDrop — лише платформа для зустрічі. Умови, ціна і результат — між вами і виконавцем.</div>
+            <div style="font-size:0.9rem;color:#aaa;line-height:1.5;">FlyerDrop — лише платформа для зустрічі. Умови, ціна і результат — між вами і виконавцем.</div>
           </div>
         </div>
       </div>
@@ -1387,11 +1387,11 @@
   </div>
 
   <footer>
-    <p>© 2026 AdDrop. Всі права захищені.</p>
+    <p>© 2026 FlyerDrop. Всі права захищені.</p>
     <div style="display:flex;gap:20px;flex-wrap:wrap;">
       <a href="#">Політика конфіденційності</a>
       <a href="#">Умови користування</a>
-      <a href="mailto:addrop@example.com">addrop@example.com</a>
+      <a href="mailto:flyerdrop@example.com">flyerdrop@example.com</a>
       <a href="#" id="adminLink" style="color:var(--orange);">Адмін</a>
     </div>
   </footer>
@@ -1401,10 +1401,10 @@
     let currentUser = null;
 
     function loadUsers(){
-      let users = localStorage.getItem('addrop_users');
+      let users = localStorage.getItem('flyerdrop_users');
       if(!users){
         users = [];
-        localStorage.setItem('addrop_users', JSON.stringify(users));
+        localStorage.setItem('flyerdrop_users', JSON.stringify(users));
       } else {
         users = JSON.parse(users);
       }
@@ -1412,14 +1412,14 @@
     }
 
     function saveUsers(users){
-      localStorage.setItem('addrop_users', JSON.stringify(users));
+      localStorage.setItem('flyerdrop_users', JSON.stringify(users));
     }
 
     function loadTasks(){
-      let tasks = localStorage.getItem('addrop_tasks');
+      let tasks = localStorage.getItem('flyerdrop_tasks');
       if(!tasks){
         tasks = [];
-        localStorage.setItem('addrop_tasks', JSON.stringify(tasks));
+        localStorage.setItem('flyerdrop_tasks', JSON.stringify(tasks));
       } else {
         tasks = JSON.parse(tasks);
       }
@@ -1427,7 +1427,7 @@
     }
 
     function saveTasks(tasks){
-      localStorage.setItem('addrop_tasks', JSON.stringify(tasks));
+      localStorage.setItem('flyerdrop_tasks', JSON.stringify(tasks));
     }
 
     function updateUIByAuth(){
@@ -1521,7 +1521,7 @@
     document.getElementById('closeModalBtn').onclick = () => closeModal(authModal);
     document.getElementById('logoutBtn').onclick = () => {
       currentUser = null;
-      localStorage.removeItem('addrop_current_user');
+      localStorage.removeItem('flyerdrop_current_user');
       updateUIByAuth();
     };
 
@@ -1555,7 +1555,7 @@
       }
 
       currentUser = user;
-      localStorage.setItem('addrop_current_user', JSON.stringify(user));
+      localStorage.setItem('flyerdrop_current_user', JSON.stringify(user));
       closeModal(authModal);
       updateUIByAuth();
 
@@ -1665,7 +1665,7 @@
           saveUsers(users);
         }
         currentUser = user;
-        localStorage.setItem('addrop_current_user', JSON.stringify(user));
+        localStorage.setItem('flyerdrop_current_user', JSON.stringify(user));
         wizardData.phone = phone;
       } else {
         wizardData.phone = currentUser.phone;
@@ -1747,7 +1747,7 @@
     }
 
     // ========== ЗАВАНТАЖЕННЯ ПОТОЧНОГО КОРИСТУВАЧА ==========
-    const savedUser = localStorage.getItem('addrop_current_user');
+    const savedUser = localStorage.getItem('flyerdrop_current_user');
     if(savedUser){
       currentUser = JSON.parse(savedUser);
     }
@@ -1761,18 +1761,18 @@
     const reportModal = document.getElementById('reportModal');
 
     function loadWorkers(){
-      let w = localStorage.getItem('addrop_workers');
+      let w = localStorage.getItem('flyerdrop_workers');
       return w ? JSON.parse(w) : [];
     }
     function saveWorkers(workers){
-      localStorage.setItem('addrop_workers', JSON.stringify(workers));
+      localStorage.setItem('flyerdrop_workers', JSON.stringify(workers));
     }
     function loadReports(){
-      let r = localStorage.getItem('addrop_reports');
+      let r = localStorage.getItem('flyerdrop_reports');
       return r ? JSON.parse(r) : [];
     }
     function saveReports(reports){
-      localStorage.setItem('addrop_reports', JSON.stringify(reports));
+      localStorage.setItem('flyerdrop_reports', JSON.stringify(reports));
     }
 
     function updateUIByWorkerAuth(){
@@ -1891,17 +1891,17 @@
         alert('Вітаємо з поверненням!');
       }
       currentWorker = worker;
-      localStorage.setItem('addrop_current_worker', JSON.stringify(worker));
+      localStorage.setItem('flyerdrop_current_worker', JSON.stringify(worker));
       closeModal(workerAuthModal);
       // скидаємо замовника якщо був
       currentUser = null;
-      localStorage.removeItem('addrop_current_user');
+      localStorage.removeItem('flyerdrop_current_user');
       updateUIByWorkerAuth();
     };
 
     document.getElementById('workerLogoutBtn').onclick = () => {
       currentWorker = null;
-      localStorage.removeItem('addrop_current_worker');
+      localStorage.removeItem('flyerdrop_current_worker');
       workerCabinetPage.classList.remove('active');
       document.getElementById('workerBtn').textContent = '🙋 Роздавальник';
       document.getElementById('publicLayout').style.display = 'grid';
@@ -1931,7 +1931,7 @@
     };
 
     // Перевіряємо збережений роздавальник
-    const savedWorker = localStorage.getItem('addrop_current_worker');
+    const savedWorker = localStorage.getItem('flyerdrop_current_worker');
     if(savedWorker){ currentWorker = JSON.parse(savedWorker); }
 
     // Ініціалізація
