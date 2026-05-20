@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FlyerDrop — Реклама, яка розходиться в руки</title>
+  <title>AdDrop — Реклама, яка розходиться в руки</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -679,7 +679,7 @@
         <span></span>
         <span></span>
       </label>
-      <div class="logo">FlyerDrop</div>
+      <div class="logo">AdDrop</div>
     </div>
     <div class="header-btns">
       <button class="login-btn" id="loginBtn">Замовник</button>
@@ -690,7 +690,7 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-content">
-      <h1><span>FlyerDrop</span> — Реклама, яка розходиться в руки</h1>
+      <h1><span>AdDrop</span> — Реклама, яка розходиться в руки</h1>
       <p>Флаєри, акції, пробники, друк — підберемо роздавальників за 5 хвилин. Запускай рекламні кампанії швидко, агресивно та без зайвих посередників.</p>
       <button class="cta-btn" id="ctaBtn">Створити завдання</button>
     </div>
@@ -706,17 +706,20 @@
         <label for="menu-toggle" style="cursor:pointer;font-size:1.8rem;color:#888;line-height:1;padding:4px 8px;">✕</label>
       </div>
       <div class="service-list">
-        <button class="service-btn">📄 Флаєри</button>
-        <button class="service-btn">🎯 Акції</button>
-        <button class="service-btn">📰 Печатна продукція</button>
-        <button class="service-btn">📦 Купони</button>
-        <button class="service-btn">🛍️ Пробники</button>
-        <button class="service-btn">🗞️ Газети</button>
-        <button class="service-btn">⚡ Інше</button>
+        <button class="service-btn" onclick="showService('flyers', this)">📄 Флаєри</button>
+        <button class="service-btn" onclick="showService('aktsii', this)">🎯 Акції</button>
+        <button class="service-btn" onclick="showService('print', this)">📰 Печатна продукція</button>
+        <button class="service-btn" onclick="showService('kupony', this)">📦 Купони</button>
+        <button class="service-btn" onclick="showService('probnyky', this)">🛍️ Пробники</button>
+        <button class="service-btn" onclick="showService('gazety', this)">🗞️ Газети</button>
+        <button class="service-btn" onclick="showService('inше', this)">⚡ Інше</button>
       </div>
     </aside>
 
-    <main class="content">
+    <main class="content" id="mainContent">
+
+      <!-- DEFAULT CONTENT -->
+      <div id="service-default">
       <section>
         <h2 class="section-title">Як це працює</h2>
         <div class="cards">
@@ -726,9 +729,8 @@
           <div class="card"><div class="card-number">4</div><h3>Запускаєш кампанію</h3><p>Обирай виконавця, запускай рекламу та отримуй звіти.</p></div>
         </div>
       </section>
-
       <section>
-        <h2 class="section-title">Чому FlyerDrop?</h2>
+        <h2 class="section-title">Чому AdDrop?</h2>
         <div class="advantages">
           <div class="advantage" onclick="openAdvModal('no-middlemen')" style="cursor:pointer;">🚀 Без посередників</div>
           <div class="advantage" onclick="openAdvModal('geo-report')" style="cursor:pointer;">📍 Звіт із геолокацією</div>
@@ -736,7 +738,6 @@
           <div class="advantage" onclick="openAdvModal('fast-launch')" style="cursor:pointer;">⚡ Швидкий запуск кампаній</div>
         </div>
       </section>
-
       <section>
         <h2 class="section-title">Приклади завдань</h2>
         <div class="tasks">
@@ -746,6 +747,192 @@
           <div class="task"><div class="task-tag">Газети</div><h4>Рознос друку</h4><p>Доставка рекламних газет по житлових кварталах.</p></div>
         </div>
       </section>
+      </div>
+
+      <!-- ═══════════ ФЛАЄРИ ═══════════ -->
+      <div id="service-flyers" style="display:none;">
+
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:32px;flex-wrap:wrap;">
+          <div style="font-size:2.8rem;">📄</div>
+          <div>
+            <h2 style="font-size:2rem;font-weight:900;margin:0;">Роздача флаєрів</h2>
+            <p style="color:#aaa;margin:4px 0 0;font-size:1rem;">Офлайн-реклама, яка потрапляє прямо в руки вашої аудиторії</p>
+          </div>
+          <button class="login-btn" id="ctaBtnFlyers" style="margin-left:auto;" onclick="document.getElementById('ctaBtn').click()">📋 Створити завдання</button>
+        </div>
+
+        <!-- ЦИФРИ -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:36px;">
+          <div style="background:#1b1b1b;border-radius:18px;padding:22px;text-align:center;border:1px solid #2a2a2a;">
+            <div style="font-size:2.2rem;font-weight:900;color:var(--orange);">500+</div>
+            <div style="font-size:0.85rem;color:#aaa;margin-top:6px;">Роздавальників у базі</div>
+          </div>
+          <div style="background:#1b1b1b;border-radius:18px;padding:22px;text-align:center;border:1px solid #2a2a2a;">
+            <div style="font-size:2.2rem;font-weight:900;color:var(--orange);">5 хв</div>
+            <div style="font-size:0.85rem;color:#aaa;margin-top:6px;">Середній час до запуску</div>
+          </div>
+          <div style="background:#1b1b1b;border-radius:18px;padding:22px;text-align:center;border:1px solid #2a2a2a;">
+            <div style="font-size:2.2rem;font-weight:900;color:var(--orange);">від ₴3</div>
+            <div style="font-size:0.85rem;color:#aaa;margin-top:6px;">Вартість за 1 флаєр</div>
+          </div>
+          <div style="background:#1b1b1b;border-radius:18px;padding:22px;text-align:center;border:1px solid #2a2a2a;">
+            <div style="font-size:2.2rem;font-weight:900;color:var(--orange);">98%</div>
+            <div style="font-size:0.85rem;color:#aaa;margin-top:6px;">Задоволених замовників</div>
+          </div>
+        </div>
+
+        <!-- ЩО ТАКЕ ФЛАЄР-КАМПАНІЯ -->
+        <section style="margin-bottom:36px;">
+          <h3 style="font-size:1.5rem;font-weight:800;margin-bottom:16px;">Що таке флаєр-кампанія на FlyerDrop?</h3>
+          <p style="color:#ccc;line-height:1.8;font-size:1rem;margin-bottom:12px;">
+            Флаєр-кампанія — це найшвидший спосіб донести ваше рекламне повідомлення до людей у потрібному місці та в потрібний час. Ви вказуєте район, кількість матеріалів і час — ми знаходимо перевіреного роздавальника, який виконає роботу та надішле фотозвіт із геолокацією.
+          </p>
+          <p style="color:#ccc;line-height:1.8;font-size:1rem;">
+            Підходить для магазинів, кафе, фітнес-клубів, нерухомості, освітніх курсів — будь-якого бізнесу, якому потрібна швидка офлайн-видимість.
+          </p>
+        </section>
+
+        <!-- ФОРМАТИ -->
+        <section style="margin-bottom:36px;">
+          <h3 style="font-size:1.5rem;font-weight:800;margin-bottom:20px;">Формати роздачі</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;">
+            <div style="background:#1b1b1b;border-radius:16px;padding:20px;border-left:4px solid var(--orange);">
+              <div style="font-size:1.5rem;margin-bottom:10px;">🏬</div>
+              <h4 style="font-weight:800;margin-bottom:8px;">Біля магазину / кафе</h4>
+              <p style="color:#aaa;font-size:0.9rem;line-height:1.6;">Роздача перехожим безпосередньо біля вашої точки. Максимальне охоплення потенційних клієнтів.</p>
+            </div>
+            <div style="background:#1b1b1b;border-radius:16px;padding:20px;border-left:4px solid var(--orange);">
+              <div style="font-size:1.5rem;margin-bottom:10px;">🚇</div>
+              <h4 style="font-weight:800;margin-bottom:8px;">Біля метро / зупинок</h4>
+              <p style="color:#aaa;font-size:0.9rem;line-height:1.6;">Висока прохідність у годину пік. Ідеально для масових акцій та знижок.</p>
+            </div>
+            <div style="background:#1b1b1b;border-radius:16px;padding:20px;border-left:4px solid var(--orange);">
+              <div style="font-size:1.5rem;margin-bottom:10px;">🏪</div>
+              <h4 style="font-weight:800;margin-bottom:8px;">У ТРЦ</h4>
+              <p style="color:#aaa;font-size:0.9rem;line-height:1.6;">Цільова аудиторія з купівельною активністю. Роздача у фоє або на виході.</p>
+            </div>
+            <div style="background:#1b1b1b;border-radius:16px;padding:20px;border-left:4px solid var(--orange);">
+              <div style="font-size:1.5rem;margin-bottom:10px;">🏘️</div>
+              <h4 style="font-weight:800;margin-bottom:8px;">По житлових кварталах</h4>
+              <p style="color:#aaa;font-size:0.9rem;line-height:1.6;">Адресна доставка у поштові скриньки або під двері квартир. Локальне охоплення.</p>
+            </div>
+            <div style="background:#1b1b1b;border-radius:16px;padding:20px;border-left:4px solid var(--orange);">
+              <div style="font-size:1.5rem;margin-bottom:10px;">🎪</div>
+              <h4 style="font-weight:800;margin-bottom:8px;">На заходах / ринках</h4>
+              <p style="color:#aaa;font-size:0.9rem;line-height:1.6;">Ярмарки, фестивалі, спортивні події — роздача там, де збирається ваша аудиторія.</p>
+            </div>
+            <div style="background:#1b1b1b;border-radius:16px;padding:20px;border-left:4px solid var(--orange);">
+              <div style="font-size:1.5rem;margin-bottom:10px;">🏫</div>
+              <h4 style="font-weight:800;margin-bottom:8px;">Біля шкіл / університетів</h4>
+              <p style="color:#aaa;font-size:0.9rem;line-height:1.6;">Молодіжна аудиторія. Ефективно для курсів, доставки їжі, розваг.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ЯК ЗАМОВИТИ -->
+        <section style="margin-bottom:36px;">
+          <h3 style="font-size:1.5rem;font-weight:800;margin-bottom:20px;">Як замовити роздачу флаєрів</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;">
+            <div style="background:#1b1b1b;border-radius:16px;padding:20px;text-align:center;">
+              <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--red));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;margin:0 auto 14px;">1</div>
+              <h4 style="font-weight:800;margin-bottom:8px;">Створи завдання</h4>
+              <p style="color:#aaa;font-size:0.88rem;line-height:1.6;">Вкажи кількість флаєрів, район, час та умови оплати</p>
+            </div>
+            <div style="background:#1b1b1b;border-radius:16px;padding:20px;text-align:center;">
+              <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--red));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;margin:0 auto 14px;">2</div>
+              <h4 style="font-weight:800;margin-bottom:8px;">Отримай пропозиції</h4>
+              <p style="color:#aaa;font-size:0.88rem;line-height:1.6;">Роздавальники у твоєму районі побачать завдання та відгукнуться</p>
+            </div>
+            <div style="background:#1b1b1b;border-radius:16px;padding:20px;text-align:center;">
+              <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--red));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;margin:0 auto 14px;">3</div>
+              <h4 style="font-weight:800;margin-bottom:8px;">Вибери виконавця</h4>
+              <p style="color:#aaa;font-size:0.88rem;line-height:1.6;">Переглянь рейтинг, відгуки та вибери найкращого</p>
+            </div>
+            <div style="background:#1b1b1b;border-radius:16px;padding:20px;text-align:center;">
+              <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--red));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;margin:0 auto 14px;">4</div>
+              <h4 style="font-weight:800;margin-bottom:8px;">Отримай звіт</h4>
+              <p style="color:#aaa;font-size:0.88rem;line-height:1.6;">Фото з місця роздачі + геолокація + кількість розданих флаєрів</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ЦІНИ -->
+        <section style="margin-bottom:36px;">
+          <h3 style="font-size:1.5rem;font-weight:800;margin-bottom:20px;">Орієнтовні ціни</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;">
+            <div style="background:#1b1b1b;border-radius:18px;padding:24px;border:1px solid #2a2a2a;position:relative;">
+              <div style="font-size:0.8rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Мінімум</div>
+              <div style="font-size:2rem;font-weight:900;">₴300</div>
+              <div style="color:#aaa;font-size:0.85rem;margin:8px 0 16px;">100–300 флаєрів · 2–3 год</div>
+              <ul style="color:#ccc;font-size:0.88rem;line-height:2;list-style:none;padding:0;">
+                <li>✓ 1 роздавальник</li>
+                <li>✓ 1 локація</li>
+                <li>✓ Фотозвіт</li>
+              </ul>
+            </div>
+            <div style="background:linear-gradient(135deg,rgba(255,94,0,0.15),rgba(255,30,30,0.1));border-radius:18px;padding:24px;border:2px solid var(--orange);position:relative;">
+              <div style="position:absolute;top:-10px;left:20px;background:linear-gradient(135deg,var(--orange),var(--red));color:white;font-size:0.75rem;font-weight:800;padding:4px 12px;border-radius:20px;">ПОПУЛЯРНЕ</div>
+              <div style="font-size:0.8rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Стандарт</div>
+              <div style="font-size:2rem;font-weight:900;">₴800</div>
+              <div style="color:#aaa;font-size:0.85rem;margin:8px 0 16px;">500–1000 флаєрів · 4–6 год</div>
+              <ul style="color:#ccc;font-size:0.88rem;line-height:2;list-style:none;padding:0;">
+                <li>✓ 1–2 роздавальники</li>
+                <li>✓ До 3 локацій</li>
+                <li>✓ Фото + геолокація</li>
+                <li>✓ Підрахунок результату</li>
+              </ul>
+            </div>
+            <div style="background:#1b1b1b;border-radius:18px;padding:24px;border:1px solid #2a2a2a;">
+              <div style="font-size:0.8rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Масштаб</div>
+              <div style="font-size:2rem;font-weight:900;">від ₴2000</div>
+              <div style="color:#aaa;font-size:0.85rem;margin:8px 0 16px;">2000+ флаєрів · цілий день</div>
+              <ul style="color:#ccc;font-size:0.88rem;line-height:2;list-style:none;padding:0;">
+                <li>✓ Команда 3–10 осіб</li>
+                <li>✓ Кілька районів міста</li>
+                <li>✓ Детальний звіт</li>
+                <li>✓ Координатор кампанії</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section style="margin-bottom:36px;">
+          <h3 style="font-size:1.5rem;font-weight:800;margin-bottom:20px;">Часті запитання</h3>
+          <div style="display:flex;flex-direction:column;gap:10px;" id="faqList">
+            <div class="faq-item" onclick="toggleFaq(this)" style="background:#1b1b1b;border-radius:14px;padding:18px 20px;cursor:pointer;border:1px solid #2a2a2a;">
+              <div style="display:flex;justify-content:space-between;align-items:center;font-weight:700;">Хто такі роздавальники на FlyerDrop? <span class="faq-arrow" style="color:var(--orange);font-size:1.2rem;transition:.2s;">＋</span></div>
+              <div class="faq-answer" style="display:none;color:#aaa;font-size:0.92rem;line-height:1.7;margin-top:12px;">Це перевірені виконавці, які пройшли реєстрацію на платформі. Кожен має рейтинг та відгуки від попередніх замовників. Ви самі обираєте, кому довірити кампанію.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)" style="background:#1b1b1b;border-radius:14px;padding:18px 20px;cursor:pointer;border:1px solid #2a2a2a;">
+              <div style="display:flex;justify-content:space-between;align-items:center;font-weight:700;">Чи надають роздавальники флаєри самі? <span class="faq-arrow" style="color:var(--orange);font-size:1.2rem;transition:.2s;">＋</span></div>
+              <div class="faq-answer" style="display:none;color:#aaa;font-size:0.92rem;line-height:1.7;margin-top:12px;">Ні. Роздавальники лише роздають — матеріали надає замовник. У завданні ви вказуєте адресу, де роздавальник забирає флаєри. Ми також можемо допомогти з організацією друку.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)" style="background:#1b1b1b;border-radius:14px;padding:18px 20px;cursor:pointer;border:1px solid #2a2a2a;">
+              <div style="display:flex;justify-content:space-between;align-items:center;font-weight:700;">Як я дізнаюся, що флаєри справді роздали? <span class="faq-arrow" style="color:var(--orange);font-size:1.2rem;transition:.2s;">＋</span></div>
+              <div class="faq-answer" style="display:none;color:#aaa;font-size:0.92rem;line-height:1.7;margin-top:12px;">Роздавальник надсилає фотозвіт з місця роздачі з геолокацією. Ви бачите фото до початку, в процесі та після завершення кампанії. Кількість розданих матеріалів фіксується у звіті.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)" style="background:#1b1b1b;border-radius:14px;padding:18px 20px;cursor:pointer;border:1px solid #2a2a2a;">
+              <div style="display:flex;justify-content:space-between;align-items:center;font-weight:700;">За скільки наперед потрібно розміщувати замовлення? <span class="faq-arrow" style="color:var(--orange);font-size:1.2rem;transition:.2s;">＋</span></div>
+              <div class="faq-answer" style="display:none;color:#aaa;font-size:0.92rem;line-height:1.7;margin-top:12px;">Термінові замовлення виконуються за 5–30 хвилин. Для великих кампаній (1000+ флаєрів, кілька районів) рекомендуємо замовляти за 1–2 дні заздалегідь.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)" style="background:#1b1b1b;border-radius:14px;padding:18px 20px;cursor:pointer;border:1px solid #2a2a2a;">
+              <div style="display:flex;justify-content:space-between;align-items:center;font-weight:700;">Де зараз доступна послуга? <span class="faq-arrow" style="color:var(--orange);font-size:1.2rem;transition:.2s;">＋</span></div>
+              <div class="faq-answer" style="display:none;color:#aaa;font-size:0.92rem;line-height:1.7;margin-top:12px;">Зараз FlyerDrop працює у Козятині та Вінниці. Незабаром — Київ та інші обласні центри. Хочете, щоб ваше місто з'явилось першим? Залиште заявку — ми зв'яжемося.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CTA BANNER -->
+        <div style="background:linear-gradient(135deg,rgba(255,94,0,0.2),rgba(255,30,30,0.12));border:1px solid rgba(255,94,0,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:20px;">
+          <div style="font-size:2rem;margin-bottom:10px;">🚀</div>
+          <h3 style="font-size:1.6rem;font-weight:900;margin-bottom:10px;">Готові запустити роздачу?</h3>
+          <p style="color:#aaa;margin-bottom:22px;font-size:1rem;">Створіть завдання за 2 хвилини — виконавець знайдеться за 5</p>
+          <button class="login-btn" onclick="document.getElementById('ctaBtn').click()" style="font-size:1rem;padding:16px 36px;">📋 Створити завдання безкоштовно</button>
+        </div>
+
+      </div><!-- /service-flyers -->
+
     </main>
   </div>
 
@@ -1158,7 +1345,7 @@
           <div style="font-size:2rem;flex-shrink:0;">🤝</div>
           <div>
             <div style="font-weight:800;margin-bottom:4px;">Чесна угода</div>
-            <div style="font-size:0.9rem;color:#aaa;line-height:1.5;">FlyerDrop — лише платформа для зустрічі. Умови, ціна і результат — між вами і виконавцем.</div>
+            <div style="font-size:0.9rem;color:#aaa;line-height:1.5;">AdDrop — лише платформа для зустрічі. Умови, ціна і результат — між вами і виконавцем.</div>
           </div>
         </div>
       </div>
@@ -1387,11 +1574,11 @@
   </div>
 
   <footer>
-    <p>© 2026 FlyerDrop. Всі права захищені.</p>
+    <p>© 2026 AdDrop. Всі права захищені.</p>
     <div style="display:flex;gap:20px;flex-wrap:wrap;">
       <a href="#">Політика конфіденційності</a>
       <a href="#">Умови користування</a>
-      <a href="mailto:flyerdrop@example.com">flyerdrop@example.com</a>
+      <a href="mailto:addrop@example.com">addrop@example.com</a>
       <a href="#" id="adminLink" style="color:var(--orange);">Адмін</a>
     </div>
   </footer>
@@ -1401,10 +1588,10 @@
     let currentUser = null;
 
     function loadUsers(){
-      let users = localStorage.getItem('flyerdrop_users');
+      let users = localStorage.getItem('addrop_users');
       if(!users){
         users = [];
-        localStorage.setItem('flyerdrop_users', JSON.stringify(users));
+        localStorage.setItem('addrop_users', JSON.stringify(users));
       } else {
         users = JSON.parse(users);
       }
@@ -1412,14 +1599,14 @@
     }
 
     function saveUsers(users){
-      localStorage.setItem('flyerdrop_users', JSON.stringify(users));
+      localStorage.setItem('addrop_users', JSON.stringify(users));
     }
 
     function loadTasks(){
-      let tasks = localStorage.getItem('flyerdrop_tasks');
+      let tasks = localStorage.getItem('addrop_tasks');
       if(!tasks){
         tasks = [];
-        localStorage.setItem('flyerdrop_tasks', JSON.stringify(tasks));
+        localStorage.setItem('addrop_tasks', JSON.stringify(tasks));
       } else {
         tasks = JSON.parse(tasks);
       }
@@ -1427,7 +1614,7 @@
     }
 
     function saveTasks(tasks){
-      localStorage.setItem('flyerdrop_tasks', JSON.stringify(tasks));
+      localStorage.setItem('addrop_tasks', JSON.stringify(tasks));
     }
 
     function updateUIByAuth(){
@@ -1521,7 +1708,7 @@
     document.getElementById('closeModalBtn').onclick = () => closeModal(authModal);
     document.getElementById('logoutBtn').onclick = () => {
       currentUser = null;
-      localStorage.removeItem('flyerdrop_current_user');
+      localStorage.removeItem('addrop_current_user');
       updateUIByAuth();
     };
 
@@ -1555,7 +1742,7 @@
       }
 
       currentUser = user;
-      localStorage.setItem('flyerdrop_current_user', JSON.stringify(user));
+      localStorage.setItem('addrop_current_user', JSON.stringify(user));
       closeModal(authModal);
       updateUIByAuth();
 
@@ -1665,7 +1852,7 @@
           saveUsers(users);
         }
         currentUser = user;
-        localStorage.setItem('flyerdrop_current_user', JSON.stringify(user));
+        localStorage.setItem('addrop_current_user', JSON.stringify(user));
         wizardData.phone = phone;
       } else {
         wizardData.phone = currentUser.phone;
@@ -1747,7 +1934,7 @@
     }
 
     // ========== ЗАВАНТАЖЕННЯ ПОТОЧНОГО КОРИСТУВАЧА ==========
-    const savedUser = localStorage.getItem('flyerdrop_current_user');
+    const savedUser = localStorage.getItem('addrop_current_user');
     if(savedUser){
       currentUser = JSON.parse(savedUser);
     }
@@ -1761,18 +1948,18 @@
     const reportModal = document.getElementById('reportModal');
 
     function loadWorkers(){
-      let w = localStorage.getItem('flyerdrop_workers');
+      let w = localStorage.getItem('addrop_workers');
       return w ? JSON.parse(w) : [];
     }
     function saveWorkers(workers){
-      localStorage.setItem('flyerdrop_workers', JSON.stringify(workers));
+      localStorage.setItem('addrop_workers', JSON.stringify(workers));
     }
     function loadReports(){
-      let r = localStorage.getItem('flyerdrop_reports');
+      let r = localStorage.getItem('addrop_reports');
       return r ? JSON.parse(r) : [];
     }
     function saveReports(reports){
-      localStorage.setItem('flyerdrop_reports', JSON.stringify(reports));
+      localStorage.setItem('addrop_reports', JSON.stringify(reports));
     }
 
     function updateUIByWorkerAuth(){
@@ -1891,17 +2078,17 @@
         alert('Вітаємо з поверненням!');
       }
       currentWorker = worker;
-      localStorage.setItem('flyerdrop_current_worker', JSON.stringify(worker));
+      localStorage.setItem('addrop_current_worker', JSON.stringify(worker));
       closeModal(workerAuthModal);
       // скидаємо замовника якщо був
       currentUser = null;
-      localStorage.removeItem('flyerdrop_current_user');
+      localStorage.removeItem('addrop_current_user');
       updateUIByWorkerAuth();
     };
 
     document.getElementById('workerLogoutBtn').onclick = () => {
       currentWorker = null;
-      localStorage.removeItem('flyerdrop_current_worker');
+      localStorage.removeItem('addrop_current_worker');
       workerCabinetPage.classList.remove('active');
       document.getElementById('workerBtn').textContent = '🙋 Роздавальник';
       document.getElementById('publicLayout').style.display = 'grid';
@@ -1931,7 +2118,7 @@
     };
 
     // Перевіряємо збережений роздавальник
-    const savedWorker = localStorage.getItem('flyerdrop_current_worker');
+    const savedWorker = localStorage.getItem('addrop_current_worker');
     if(savedWorker){ currentWorker = JSON.parse(savedWorker); }
 
     // Ініціалізація
@@ -1998,6 +2185,51 @@
     window.openDistrictModal = openDistrictModal;
     window.selectCity = selectCity;
     window.selectDistrict = selectDistrict;
+
+    // ── SERVICE NAVIGATION ──
+    function showService(id, btn) {
+      // hide all service panels + default
+      document.getElementById('service-default').style.display = 'none';
+      const flyersPanel = document.getElementById('service-flyers');
+      flyersPanel.style.display = 'none';
+
+      // remove active from all buttons
+      document.querySelectorAll('.service-btn').forEach(b => {
+        b.style.background = '';
+        b.style.transform = '';
+        b.style.boxShadow = '';
+      });
+
+      if (id === 'flyers') {
+        flyersPanel.style.display = 'block';
+        btn.style.background = 'linear-gradient(135deg,var(--orange),var(--red))';
+        btn.style.boxShadow = '0 10px 24px rgba(255,94,0,0.35)';
+        document.getElementById('mainContent').scrollTop = 0;
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      } else {
+        // other services — show default with coming soon note
+        document.getElementById('service-default').style.display = 'block';
+        btn.style.background = 'linear-gradient(135deg,var(--orange),var(--red))';
+        btn.style.boxShadow = '0 10px 24px rgba(255,94,0,0.35)';
+      }
+    }
+    window.showService = showService;
+
+    // ── FAQ TOGGLE ──
+    function toggleFaq(el) {
+      const answer = el.querySelector('.faq-answer');
+      const arrow = el.querySelector('.faq-arrow');
+      const isOpen = answer.style.display === 'block';
+      // close all
+      document.querySelectorAll('.faq-answer').forEach(a => a.style.display = 'none');
+      document.querySelectorAll('.faq-arrow').forEach(a => { a.textContent = '＋'; a.style.transform = ''; });
+      if (!isOpen) {
+        answer.style.display = 'block';
+        arrow.textContent = '－';
+        arrow.style.transform = 'rotate(180deg)';
+      }
+    }
+    window.toggleFaq = toggleFaq;
   </script>
 </body>
 </html>
