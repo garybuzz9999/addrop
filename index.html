@@ -1336,6 +1336,20 @@
       return snap.docs.map(d=>({id:d.id,...d.data()}));
     }
 
+
+    // ===== CLOUDINARY UPLOAD =====
+    async function uploadPhotoToCloudinary(file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'flyerdrop');
+      formData.append('cloud_name', 'drmcpq7qu');
+      const res = await fetch('https://api.cloudinary.com/v1_1/drmcpq7qu/image/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      return data.secure_url;
+    }
     function loadUsers(){ return []; }
     function saveUsers(u){}
     function loadTasks(){ return window._tasks || []; }
@@ -1553,11 +1567,28 @@
     };
     document.getElementById('workerLogoutBtn').onclick=()=>{currentWorker=null;window._currentWorkerData=null;document.getElementById('workerCabinetPage').classList.remove('active');document.getElementById('workerBtn').textContent='🙋 Роздавальник';document.getElementById('publicLayout').style.display='grid';};
     document.getElementById('closeReportBtn').onclick=()=>closeModal(document.getElementById('reportModal'));
-    document.getElementById('submitReportBtn').onclick=()=>{
-      const id=parseInt(document.getElementById('reportTaskId').value);
-      const r=loadReports(),idx=r.findIndex(x=>x.workerId===currentWorker.id&&x.taskId===id);
-      if(idx!==-1){r[idx].submitted=true;r[idx].comment=document.getElementById('reportComment').value;r[idx].gps=workerGps;r[idx].submittedAt=new Date().toISOString();saveReports(r);}
-      closeModal(document.getElementById('reportModal')); alert('✅ Звіт надіслано!'); renderWorkerTasks();
+    document.getElementById('submitReportBtn').onclick=async()=>{
+      const btn=document.getElementById('submitReportBtn');
+      btn.textContent='⏳ Завантажуємо...'; btn.disabled=true;
+      const taskId=document.getElementById('reportTaskId').value;
+      const comment=document.getElementById('reportComment').value;
+      const photoFile=document.getElementById('reportPhoto').files[0];
+      let photoUrl='';
+      try {
+        if(photoFile) photoUrl=await uploadPhotoToCloudinary(photoFile);
+        await fsSubmitReport({
+          taskId, workerId:currentWorker.id, submitted:true,
+          comment, gps:workerGps, photoUrl,
+          submittedAt:new Date().toISOString()
+        });
+        btn.textContent='✅ Надіслати звіт'; btn.disabled=false;
+        closeModal(document.getElementById('reportModal'));
+        alert('✅ Звіт надіслано!');
+        renderWorkerTasksAsync();
+      } catch(e) {
+        btn.textContent='✅ Надіслати звіт'; btn.disabled=false;
+        alert('Помилка: '+e.message);
+      }
     };
 
     // МІСТО / РАЙОН
