@@ -977,6 +977,14 @@
       <div id="tasksList" style="margin-bottom:32px;">
         <div style="text-align:center; padding:60px; color:var(--gray);">У вас поки немає завдань. Створіть перше!</div>
       </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:16px;">
+        <h3>📸 Звіти виконавців</h3>
+        <span id="newReportsBadge" style="display:none;background:linear-gradient(135deg,var(--orange),var(--red));color:white;padding:6px 14px;border-radius:20px;font-size:0.85rem;font-weight:800;">Нові звіти!</span>
+      </div>
+      <div id="reportsList" style="margin-bottom:32px;">
+        <div style="text-align:center;padding:40px;color:var(--gray);">Звіти з'являться після виконання завдань</div>
+      </div>
     </div>
   </div>
 
@@ -1323,12 +1331,34 @@
       const snap = await window.fsGetDocs(q);
       return snap.docs.map(d=>({id:d.id,...d.data()}));
     }
+    async function fsConfirmTask(taskId) {
+      if (!window.db) return;
+      await window.fsUpdateDoc(window.fsDoc(window.db,'tasks',taskId),{status:'completed',completedAt:new Date().toISOString()});
+    }
+
     async function fsSubmitReport(data) {
       if (!window.db) return null;
       const ref = await window.fsAddDoc(window.fsCollection(window.db,'reports'),{...data,createdAt:window.fsServerTimestamp()});
       await window.fsUpdateDoc(window.fsDoc(window.db,'tasks',data.taskId),{takenBy:data.workerId,status:'taken'});
       return ref.id;
     }
+    async function fsGetReportsForTask(taskId) {
+      if (!window.db) return [];
+      const q = window.fsQuery(window.fsCollection(window.db,'reports'),window.fsWhere('taskId','==',taskId));
+      const snap = await window.fsGetDocs(q);
+      return snap.docs.map(d=>({id:d.id,...d.data()}));
+    }
+
+    async function fsGetAllReportsForUser(taskIds) {
+      if (!window.db || !taskIds.length) return [];
+      const all = [];
+      for (const tid of taskIds) {
+        const r = await fsGetReportsForTask(tid);
+        all.push(...r);
+      }
+      return all;
+    }
+
     async function fsGetMyReports(workerId) {
       if (!window.db) return [];
       const q = window.fsQuery(window.fsCollection(window.db,'reports'),window.fsWhere('workerId','==',workerId));
@@ -1376,7 +1406,32 @@
       document.getElementById('completedCount').textContent = tasks.filter(t=>t.status==='completed').length;
       const c = document.getElementById('tasksList');
       if(!tasks.length){ c.innerHTML='<div style="text-align:center;padding:60px;color:var(--gray);">У вас поки немає завдань. Створіть перше!</div>'; return; }
-      c.innerHTML = tasks.map(t=>`<div class="task-item"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:12px;"><h4 style="color:var(--orange);">${t.title}</h4><span class="task-tag" style="margin-bottom:0;">${t.service}</span></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;font-size:0.9rem;color:var(--gray);"><div>📍 ${t.location}</div><div>📦 ${t.qty} шт</div><div>💰 ${t.pay} грн</div><div>📅 ${t.date||'не вказано'}</div></div><div style="margin-top:12px;"><span class="task-tag" style="background:${t.status==='active'?'rgba(255,94,0,0.2)':'#333'};color:${t.status==='active'?'var(--orange)':'#888'}">${t.status==='active'?'Активне':'Виконано'}</span></div></div>`).join('');
+      c.innerHTML = tasks.map(t=>`<div class="task-item"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:12px;"><h4 style="color:var(--orange);">${t.title}</h4><span class="task-tag" style="margin-bottom:0;">${t.service}</span></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;font-size:0.9rem;color:var(--gray);"><div>📍 ${t.location}</div><div>📦 ${t.qty} шт</div><div>💰 ${t.pay} грн</div><div>📅 ${t.date||'не вказано'}</div></div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;"><span class="task-tag" style="background:${t.status==='active'?'rgba(255,94,0,0.2)':'#333'};color:${t.status==='active'?'var(--orange)':'#888'};margin-bottom:0;">${t.status==='active'?'Активне':t.status==='taken'?'Взято виконавцем':'Виконано'}</span>${t.takenBy?'<span class="task-tag" style="background:rgba(0,200,0,0.1);color:#4cd964;margin-bottom:0;">✅ Виконавець знайдений</span>':''}${t.status==='taken'?'<button onclick="confirmTask(\''+t.id+'\',\''+t.title+'\')" style="background:linear-gradient(135deg,var(--orange),var(--red));border:none;color:white;padding:8px 16px;border-radius:10px;font-weight:800;cursor:pointer;font-size:0.85rem;margin-top:4px;">✅ Підтвердити виконання</button>':t.status==='completed'?'<span class="task-tag" style="background:rgba(0,200,0,0.15);color:#4cd964;margin-bottom:0;">🏆 Завершено</span>':''}</div></div>`).join('');
+
+      // Завантажуємо звіти
+      try {
+        const taskIds = tasks.map(t=>t.id);
+        const reports = await fsGetAllReportsForUser(taskIds);
+        const rc = document.getElementById('reportsList');
+        const badge = document.getElementById('newReportsBadge');
+        if (!reports.length) {
+          rc.innerHTML='<div style="text-align:center;padding:40px;color:var(--gray);">Звіти з'являться після виконання завдань</div>';
+          badge.style.display='none';
+        } else {
+          badge.style.display='inline-block';
+          rc.innerHTML = reports.map(r=>`
+            <div class="task-item" style="border-left:4px solid var(--orange);">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+                <h4 style="color:var(--orange);margin:0;">📸 Звіт по завданню</h4>
+                <span style="font-size:0.8rem;color:#888;">${r.submittedAt ? new Date(r.submittedAt).toLocaleString('uk-UA') : ''}</span>
+              </div>
+              ${r.photoUrl ? `<img src="${r.photoUrl}" style="width:100%;max-height:250px;object-fit:cover;border-radius:12px;margin-bottom:12px;">` : ''}
+              ${r.gps ? `<div style="font-size:0.9rem;color:#4cd964;margin-bottom:8px;">📍 GPS: ${r.gps.lat ? r.gps.lat.toFixed(5)+', '+r.gps.lng.toFixed(5) : 'є'}</div>` : ''}
+              ${r.comment ? `<div style="color:#ccc;font-size:0.9rem;">💬 ${r.comment}</div>` : ''}
+            </div>
+          `).join('');
+        }
+      } catch(e) { console.log('reports error', e); }
     }
 
     function renderUserTasks(){
@@ -1386,7 +1441,32 @@
       document.getElementById('completedCount').textContent = tasks.filter(t=>t.status==='completed').length;
       const c = document.getElementById('tasksList');
       if(!tasks.length){ c.innerHTML='<div style="text-align:center;padding:60px;color:var(--gray);">У вас поки немає завдань. Створіть перше!</div>'; return; }
-      c.innerHTML = tasks.map(t=>`<div class="task-item"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:12px;"><h4 style="color:var(--orange);">${t.title}</h4><span class="task-tag" style="margin-bottom:0;">${t.service}</span></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;font-size:0.9rem;color:var(--gray);"><div>📍 ${t.location}</div><div>📦 ${t.qty} шт</div><div>💰 ${t.pay} грн</div><div>📅 ${t.date||'не вказано'}</div></div><div style="margin-top:12px;"><span class="task-tag" style="background:${t.status==='active'?'rgba(255,94,0,0.2)':'#333'};color:${t.status==='active'?'var(--orange)':'#888'}">${t.status==='active'?'Активне':'Виконано'}</span></div></div>`).join('');
+      c.innerHTML = tasks.map(t=>`<div class="task-item"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:12px;"><h4 style="color:var(--orange);">${t.title}</h4><span class="task-tag" style="margin-bottom:0;">${t.service}</span></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;font-size:0.9rem;color:var(--gray);"><div>📍 ${t.location}</div><div>📦 ${t.qty} шт</div><div>💰 ${t.pay} грн</div><div>📅 ${t.date||'не вказано'}</div></div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;"><span class="task-tag" style="background:${t.status==='active'?'rgba(255,94,0,0.2)':'#333'};color:${t.status==='active'?'var(--orange)':'#888'};margin-bottom:0;">${t.status==='active'?'Активне':t.status==='taken'?'Взято виконавцем':'Виконано'}</span>${t.takenBy?'<span class="task-tag" style="background:rgba(0,200,0,0.1);color:#4cd964;margin-bottom:0;">✅ Виконавець знайдений</span>':''}${t.status==='taken'?'<button onclick="confirmTask(\''+t.id+'\',\''+t.title+'\')" style="background:linear-gradient(135deg,var(--orange),var(--red));border:none;color:white;padding:8px 16px;border-radius:10px;font-weight:800;cursor:pointer;font-size:0.85rem;margin-top:4px;">✅ Підтвердити виконання</button>':t.status==='completed'?'<span class="task-tag" style="background:rgba(0,200,0,0.15);color:#4cd964;margin-bottom:0;">🏆 Завершено</span>':''}</div></div>`).join('');
+
+      // Завантажуємо звіти
+      try {
+        const taskIds = tasks.map(t=>t.id);
+        const reports = await fsGetAllReportsForUser(taskIds);
+        const rc = document.getElementById('reportsList');
+        const badge = document.getElementById('newReportsBadge');
+        if (!reports.length) {
+          rc.innerHTML='<div style="text-align:center;padding:40px;color:var(--gray);">Звіти з'являться після виконання завдань</div>';
+          badge.style.display='none';
+        } else {
+          badge.style.display='inline-block';
+          rc.innerHTML = reports.map(r=>`
+            <div class="task-item" style="border-left:4px solid var(--orange);">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+                <h4 style="color:var(--orange);margin:0;">📸 Звіт по завданню</h4>
+                <span style="font-size:0.8rem;color:#888;">${r.submittedAt ? new Date(r.submittedAt).toLocaleString('uk-UA') : ''}</span>
+              </div>
+              ${r.photoUrl ? `<img src="${r.photoUrl}" style="width:100%;max-height:250px;object-fit:cover;border-radius:12px;margin-bottom:12px;">` : ''}
+              ${r.gps ? `<div style="font-size:0.9rem;color:#4cd964;margin-bottom:8px;">📍 GPS: ${r.gps.lat ? r.gps.lat.toFixed(5)+', '+r.gps.lng.toFixed(5) : 'є'}</div>` : ''}
+              ${r.comment ? `<div style="color:#ccc;font-size:0.9rem;">💬 ${r.comment}</div>` : ''}
+            </div>
+          `).join('');
+        }
+      } catch(e) { console.log('reports error', e); }
     }
 
     function addTask(d){
@@ -1467,6 +1547,15 @@
         closeModal(document.getElementById('taskModal')); updateUIByAuth(); alert('✅ Завдання створено!');
       }
     }
+    window.confirmTask = async function(taskId) {
+      if (!confirm('Підтвердити виконання завдання? Після цього воно буде закрите.')) return;
+      try {
+        await fsConfirmTask(taskId);
+        await renderUserTasksAsync();
+        alert('✅ Завдання підтверджено!');
+      } catch(e) { alert('Помилка: '+e.message); }
+    };
+
     window.wizardChoose=wizardChoose; window.wizardNext=wizardNext; window.wizardNextTitle=wizardNextTitle; window.wizardNextLocation=wizardNextLocation; window.wizardSubmit=wizardSubmit; window.wizardOpen=wizardOpen;
 
     // АДМІНКА
