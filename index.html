@@ -983,7 +983,7 @@
         <span id="newReportsBadge" style="display:none;background:linear-gradient(135deg,var(--orange),var(--red));color:white;padding:6px 14px;border-radius:20px;font-size:0.85rem;font-weight:800;">Нові звіти!</span>
       </div>
       <div id="reportsList" style="margin-bottom:32px;">
-        <div style="text-align:center;padding:40px;color:var(--gray);">Звіти з'являться після виконання завдань</div>
+        <div style="text-align:center;padding:40px;color:var(--gray);">Звіти зʼявляться після виконання завдань</div>
       </div>
     </div>
   </div>
@@ -1480,7 +1480,7 @@
         const rc = document.getElementById('reportsList');
         const badge = document.getElementById('newReportsBadge');
         if (!reports.length) {
-          rc.innerHTML='<div style="text-align:center;padding:40px;color:var(--gray);">Звіти з'являться після виконання завдань</div>';
+          rc.innerHTML='<div style="text-align:center;padding:40px;color:var(--gray);">Звіти зʼявляться після виконання завдань</div>';
           badge.style.display='none';
         } else {
           badge.style.display='inline-block';
@@ -1515,7 +1515,7 @@
         const rc = document.getElementById('reportsList');
         const badge = document.getElementById('newReportsBadge');
         if (!reports.length) {
-          rc.innerHTML='<div style="text-align:center;padding:40px;color:var(--gray);">Звіти з'являться після виконання завдань</div>';
+          rc.innerHTML='<div style="text-align:center;padding:40px;color:var(--gray);">Звіти зʼявляться після виконання завдань</div>';
           badge.style.display='none';
         } else {
           badge.style.display='inline-block';
@@ -1612,6 +1612,13 @@
         closeModal(document.getElementById('taskModal')); updateUIByAuth(); alert('✅ Завдання створено!');
       }
     }
+    window.handlePayBtn = function(btn) {
+      const taskId = btn.getAttribute('data-id');
+      const taskPay = btn.getAttribute('data-pay');
+      const taskTitle = btn.getAttribute('data-title') || 'Завдання';
+      window.requestWorkerPayment(taskId, taskTitle, taskPay);
+    };
+
     window.requestWorkerPayment = async function(taskId, taskTitle, taskPay) {
       if (!currentWorker) return;
       const name = currentWorker.name || 'Не вказано';
@@ -1753,7 +1760,7 @@
       c.innerHTML=tasks.map(task=>{
         const taken=takenIds.includes(task.id);
         const report=myReports.find(r=>r.taskId===task.id);
-        return `<div class="task-item"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:12px;"><h4 style="color:var(--orange);">${task.title}</h4><span class="task-tag" style="margin-bottom:0;">${task.service}</span></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;font-size:0.9rem;color:var(--gray);margin-bottom:14px;"><div>📍 ${task.location}</div><div>📦 ${task.qty} шт</div><div>💰 ${task.pay} грн</div></div>${!taken?`<button onclick="takeTaskFs('${task.id}')" style="background:linear-gradient(135deg,var(--orange),var(--red));border:none;color:white;padding:12px 24px;border-radius:12px;font-weight:800;cursor:pointer;width:100%;">✅ Взяти завдання</button>`:`<div style="display:flex;gap:10px;flex-wrap:wrap;"><span style="background:rgba(255,94,0,0.15);color:var(--orange);padding:8px 16px;border-radius:12px;font-weight:700;">✅ Взято</span>${!report?.submitted?`<button onclick="openReport('${task.id}','${(task.title||'').replace(/'/g,"\'")}')" style="background:#222;border:1px solid var(--orange);color:var(--orange);padding:8px 20px;border-radius:12px;font-weight:700;cursor:pointer;">📸 Надіслати звіт</button>`:`<span style="background:#1a3a1a;color:#4cd964;padding:8px 16px;border-radius:12px;font-weight:700;">📸 Звіт надіслано</span><button onclick="requestWorkerPayment('${task.id}','${(task.title||'').replace(/'/g,\"'\")}\'','${task.pay}')" style="background:linear-gradient(135deg,var(--orange),var(--red));border:none;color:white;padding:8px 16px;border-radius:12px;font-weight:700;cursor:pointer;margin-left:8px;">💰 Отримати оплату</button>`}</div>`}</div>`;
+        return `<div class="task-item"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:12px;"><h4 style="color:var(--orange);">${task.title}</h4><span class="task-tag" style="margin-bottom:0;">${task.service}</span></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;font-size:0.9rem;color:var(--gray);margin-bottom:14px;"><div>📍 ${task.location}</div><div>📦 ${task.qty} шт</div><div>💰 ${task.pay} грн</div></div>${!taken?`<button onclick="takeTaskFs('${task.id}')" style="background:linear-gradient(135deg,var(--orange),var(--red));border:none;color:white;padding:12px 24px;border-radius:12px;font-weight:800;cursor:pointer;width:100%;">✅ Взяти завдання</button>`:`<div style="display:flex;gap:10px;flex-wrap:wrap;"><span style="background:rgba(255,94,0,0.15);color:var(--orange);padding:8px 16px;border-radius:12px;font-weight:700;">✅ Взято</span>${!report?.submitted?`<button onclick="openReport('${task.id}','${(task.title||'').replace(/'/g,"\'")}')" style="background:#222;border:1px solid var(--orange);color:var(--orange);padding:8px 20px;border-radius:12px;font-weight:700;cursor:pointer;">📸 Надіслати звіт</button>`:`<span style="background:#1a3a1a;color:#4cd964;padding:8px 16px;border-radius:12px;font-weight:700;">📸 Звіт надіслано</span><button onclick="handlePayBtn(this)" data-id="${task.id}" data-pay="${task.pay}" data-title="${(task.title||''}.replace(/'/g,' ')}" " style="background:linear-gradient(135deg,var(--orange),var(--red));border:none;color:white;padding:8px 16px;border-radius:12px;font-weight:700;cursor:pointer;margin-left:8px;">💰 Отримати оплату</button>`}</div>`}</div>`;
       }).join('');
     }
 
