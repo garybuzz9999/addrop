@@ -1258,13 +1258,50 @@
     </div>
   </footer>
 
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-isU4n_s_FkNtJWLsknPOOXcmW_vW-Gk",
+      authDomain: "flyerdrop-94343.firebaseapp.com",
+      projectId: "flyerdrop-94343",
+      storageBucket: "flyerdrop-94343.firebasestorage.app",
+      messagingSenderId: "664707562442",
+      appId: "1:664707562442:web:1775b4fff13c9383412d33"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    window.googleSignIn = async () => {
+      try { await signInWithPopup(auth, provider); }
+      catch(e) { alert('Помилка: ' + e.message); }
+    };
+    window.firebaseSignOut = async () => { await signOut(auth); };
+    onAuthStateChanged(auth, (user) => {
+      window.currentUser = user ? { id: user.uid, phone: user.email, name: user.displayName, photo: user.photoURL } : null;
+      const btn = document.getElementById('googleAuthBtn');
+      if (!btn) return;
+      if (user) {
+        btn.innerHTML = (user.photoURL ? '<img src="'+user.photoURL+'" style="width:24px;height:24px;border-radius:50%;vertical-align:middle;margin-right:6px;">' : '') + (user.displayName||'').split(' ')[0];
+        btn.onclick = () => window.firebaseSignOut();
+        btn.style.background = 'rgba(255,94,0,0.15)';
+      } else {
+        btn.innerHTML = '\uD83D\uDD35 Google';
+        btn.onclick = () => window.googleSignIn();
+        btn.style.background = 'transparent';
+      }
+    });
+  </script>
+
   <script>
     let currentUser = null;
-
-    function loadUsers(){ return JSON.parse(localStorage.getItem('addrop_users') || '[]'); }
-    function saveUsers(u){ localStorage.setItem('addrop_users', JSON.stringify(u)); }
-    function loadTasks(){ return JSON.parse(localStorage.getItem('addrop_tasks') || '[]'); }
-    function saveTasks(t){ localStorage.setItem('addrop_tasks', JSON.stringify(t)); }
+    window._tasks = [];
+    window._workers = [];
+    window._reports = [];
+    function loadUsers(){ return []; }
+    function saveUsers(u){ }
+    function loadTasks(){ return window._tasks || []; }
+    function saveTasks(t){ window._tasks = t; }
 
     function updateUIByAuth(){
       const pub = document.getElementById('publicLayout');
@@ -1301,13 +1338,13 @@
     document.getElementById('loginBtn').onclick=()=>{ if(currentUser) updateUIByAuth(); else openModal(document.getElementById('authModal')); };
     document.getElementById('ctaBtn').onclick=()=>wizardOpen();
     document.getElementById('closeModalBtn').onclick=()=>closeModal(document.getElementById('authModal'));
-    document.getElementById('logoutBtn').onclick=()=>{ currentUser=null; localStorage.removeItem('addrop_current_user'); updateUIByAuth(); };
+    document.getElementById('logoutBtn').onclick=()=>{ currentUser=null; window._currentUser=null; updateUIByAuth(); };
     document.getElementById('submitAuthBtn').onclick=()=>{
       const phone=document.getElementById('phoneInput').value.trim();
       if(!phone){alert('Введіть номер телефону');return;}
       let users=loadUsers(), user=users.find(u=>u.phone===phone);
       if(!user){ user={id:Date.now(),phone,userType:document.getElementById('userType').value,city:document.getElementById('cityInput').value||'Козятин',address:document.getElementById('addressInput').value,createdAt:new Date().toISOString()}; users.push(user); saveUsers(users); alert('Реєстрація успішна!'); } else alert('Вітаємо з поверненням!');
-      currentUser=user; localStorage.setItem('addrop_current_user',JSON.stringify(user)); closeModal(document.getElementById('authModal')); updateUIByAuth();
+      currentUser=user; window._currentUser=user; closeModal(document.getElementById('authModal')); updateUIByAuth();
     };
     document.getElementById('newTaskBtn').onclick=()=>wizardOpen();
 
@@ -1350,7 +1387,7 @@
         if(!phone){alert('Введіть номер телефону');return;}
         let users=loadUsers(), user=users.find(u=>u.phone===phone);
         if(!user){ user={id:Date.now(),phone,userType:document.getElementById('taskUserType').value,city:'Козятин',createdAt:new Date().toISOString()}; users.push(user); saveUsers(users); }
-        currentUser=user; localStorage.setItem('addrop_current_user',JSON.stringify(user));
+        currentUser=user; window._currentUser=user;
       }
       addTask({title:wizardData.title,service:wizardData.service,qty:wizardData.qty,location:wizardData.location,date:wizardData.date,pay:wizardData.pay,details:wizardData.details,phone:currentUser.phone});
       const btn=document.getElementById('submitTaskBtn'); btn.textContent='⏳ Надсилаємо...'; btn.disabled=true;
@@ -1375,10 +1412,10 @@
 
     // РОЗДАВАЛЬНИК
     let currentWorker=null, workerGps=null;
-    function loadWorkers(){return JSON.parse(localStorage.getItem('addrop_workers')||'[]');}
-    function saveWorkers(w){localStorage.setItem('addrop_workers',JSON.stringify(w));}
-    function loadReports(){return JSON.parse(localStorage.getItem('addrop_reports')||'[]');}
-    function saveReports(r){localStorage.setItem('addrop_reports',JSON.stringify(r));}
+    function loadWorkers(){return window._workers||[];}
+    function saveWorkers(w){window._workers=w;}
+    function loadReports(){return window._reports||[];}
+    function saveReports(r){window._reports=r;}
 
     function updateUIByWorkerAuth(){
       if(currentWorker){
@@ -1423,10 +1460,10 @@
       if(!phone){alert('Введіть номер телефону');return;}
       let workers=loadWorkers(),worker=workers.find(w=>w.phone===phone);
       if(!worker){worker={id:Date.now(),phone,name:document.getElementById('workerName').value.trim()||phone,city:document.getElementById('workerCity').value||'Козятин',district:document.getElementById('workerDistrict').value,createdAt:new Date().toISOString()};workers.push(worker);saveWorkers(workers);alert('Реєстрація успішна!');}else alert('Вітаємо з поверненням!');
-      currentWorker=worker; localStorage.setItem('addrop_current_worker',JSON.stringify(worker));
-      closeModal(document.getElementById('workerAuthModal')); currentUser=null; localStorage.removeItem('addrop_current_user'); updateUIByWorkerAuth();
+      currentWorker=worker; window._currentWorkerData=worker;
+      closeModal(document.getElementById('workerAuthModal')); currentUser=null; window._currentUser=null; updateUIByWorkerAuth();
     };
-    document.getElementById('workerLogoutBtn').onclick=()=>{currentWorker=null;localStorage.removeItem('addrop_current_worker');document.getElementById('workerCabinetPage').classList.remove('active');document.getElementById('workerBtn').textContent='🙋 Роздавальник';document.getElementById('publicLayout').style.display='grid';};
+    document.getElementById('workerLogoutBtn').onclick=()=>{currentWorker=null;window._currentWorkerData=null;document.getElementById('workerCabinetPage').classList.remove('active');document.getElementById('workerBtn').textContent='🙋 Роздавальник';document.getElementById('publicLayout').style.display='grid';};
     document.getElementById('closeReportBtn').onclick=()=>closeModal(document.getElementById('reportModal'));
     document.getElementById('submitReportBtn').onclick=()=>{
       const id=parseInt(document.getElementById('reportTaskId').value);
@@ -1492,16 +1529,13 @@
     window.toggleFaq=toggleFaq;
 
     // GOOGLE/APPLE ЗАГЛУШКИ
-    document.getElementById('googleBtn').onclick=()=>alert('🔵 Google вхід буде доступний незабаром');
-    document.getElementById('appleBtn').onclick=()=>alert('🍎 Apple вхід буде доступний незабаром');
-    document.getElementById('workerGoogleBtn').onclick=()=>alert('🔵 Google вхід буде доступний незабаром');
-    document.getElementById('workerAppleBtn').onclick=()=>alert('🍎 Apple вхід буде доступний незабаром');
+    document.getElementById('googleBtn').onclick=()=>window.googleSignIn&&window.googleSignIn();
+    document.getElementById('appleBtn').onclick=()=>alert('🍎 Apple вхід — незабаром');
+    document.getElementById('workerGoogleBtn').onclick=()=>window.googleSignIn&&window.googleSignIn();
+    document.getElementById('workerAppleBtn').onclick=()=>alert('🍎 Apple вхід — незабаром');
 
     // ІНІЦІАЛІЗАЦІЯ
-    const savedUser=localStorage.getItem('addrop_current_user');
-    if(savedUser) currentUser=JSON.parse(savedUser);
-    const savedWorker=localStorage.getItem('addrop_current_worker');
-    if(savedWorker) currentWorker=JSON.parse(savedWorker);
+    // currentUser/currentWorker тепер через Firebase onAuthStateChanged
     if(currentWorker) updateUIByWorkerAuth(); else updateUIByAuth();
   </script>
 </body>
