@@ -683,8 +683,8 @@
       <div class="logo">FlyerDrop</div>
     </div>
     <div class="header-btns">
-      <button class="login-btn" id="loginBtn">Замовник</button>
-      <button class="worker-btn" id="workerBtn">🙋 Роздавальник</button>
+      <button class="login-btn" id="loginBtn" onclick="if(window.currentUser)updateUIByAuth();else openModal(document.getElementById('authModal'))">Замовник</button>
+      <button class="worker-btn" id="workerBtn" onclick="if(!window.currentWorker)openModal(document.getElementById('workerAuthModal'))">🙋 Роздавальник</button>
     </div>
   </header>
 
@@ -699,7 +699,7 @@
       </div>
       <h1><span>FlyerDrop</span> — Реклама, яка розходиться в руки</h1>
       <p>Флаєри, акції, пробники, друк — підберемо роздавальників за 5 хвилин. Запускай рекламні кампанії швидко, агресивно та без зайвих посередників.</p>
-      <button class="cta-btn" id="ctaBtn">Створити завдання</button>
+      <button class="cta-btn" id="ctaBtn" onclick="wizardOpen()">Створити завдання</button>
     </div>
   </section>
 
@@ -1375,6 +1375,7 @@
   </script>
 
   <script>
+
     let currentUser = null;
     window._tasks = []; window._workers = []; window._reports = [];
 
@@ -1887,6 +1888,7 @@
     // ІНІЦІАЛІЗАЦІЯ
     // currentUser/currentWorker тепер через Firebase onAuthStateChanged
     if(currentWorker) updateUIByWorkerAuth(); else updateUIByAuth();
-  </script>
+  
+</script>
 </body>
 </html>
