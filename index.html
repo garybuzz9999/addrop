@@ -1262,6 +1262,8 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, doc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
     const firebaseConfig = {
       apiKey: "AIzaSyD-isU4n_s_FkNtJWLsknPOOXcmW_vW-Gk",
       authDomain: "flyerdrop-94343.firebaseapp.com",
@@ -1270,37 +1272,72 @@
       messagingSenderId: "664707562442",
       appId: "1:664707562442:web:1775b4fff13c9383412d33"
     };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
+
+    window.db = db;
+    window.fsCollection = collection;
+    window.fsAddDoc = addDoc;
+    window.fsGetDocs = getDocs;
+    window.fsQuery = query;
+    window.fsWhere = where;
+    window.fsOrderBy = orderBy;
+    window.fsDoc = doc;
+    window.fsUpdateDoc = updateDoc;
+    window.fsServerTimestamp = serverTimestamp;
+
     window.googleSignIn = async () => {
       try { await signInWithPopup(auth, provider); }
       catch(e) { alert('Помилка: ' + e.message); }
     };
     window.firebaseSignOut = async () => { await signOut(auth); };
+
     onAuthStateChanged(auth, (user) => {
       window.currentUser = user ? { id: user.uid, phone: user.email, name: user.displayName, photo: user.photoURL } : null;
-      const btn = document.getElementById('googleAuthBtn');
-      if (!btn) return;
-      if (user) {
-        btn.innerHTML = (user.photoURL ? '<img src="'+user.photoURL+'" style="width:24px;height:24px;border-radius:50%;vertical-align:middle;margin-right:6px;">' : '') + (user.displayName||'').split(' ')[0];
-        btn.onclick = () => window.firebaseSignOut();
-        btn.style.background = 'rgba(255,94,0,0.15)';
-      } else {
-        btn.innerHTML = '\uD83D\uDD35 Google';
-        btn.onclick = () => window.googleSignIn();
-        btn.style.background = 'transparent';
-      }
+      if (window._authReady) window._authReady(user);
     });
   </script>
 
   <script>
     let currentUser = null;
-    window._tasks = [];
-    window._workers = [];
-    window._reports = [];
+    window._tasks = []; window._workers = []; window._reports = [];
+
+    // ===== FIRESTORE =====
+    async function fsAddTask(data) {
+      if (!window.db) return null;
+      const ref = await window.fsAddDoc(window.fsCollection(window.db,'tasks'),{...data,createdAt:window.fsServerTimestamp(),status:'active'});
+      return ref.id;
+    }
+    async function fsGetMyTasks(userId) {
+      if (!window.db) return [];
+      const q = window.fsQuery(window.fsCollection(window.db,'tasks'),window.fsWhere('userId','==',userId));
+      const snap = await window.fsGetDocs(q);
+      return snap.docs.map(d=>({id:d.id,...d.data()}));
+    }
+    async function fsGetAllActiveTasks() {
+      if (!window.db) return [];
+      const q = window.fsQuery(window.fsCollection(window.db,'tasks'),window.fsWhere('status','==','active'));
+      const snap = await window.fsGetDocs(q);
+      return snap.docs.map(d=>({id:d.id,...d.data()}));
+    }
+    async function fsSubmitReport(data) {
+      if (!window.db) return null;
+      const ref = await window.fsAddDoc(window.fsCollection(window.db,'reports'),{...data,createdAt:window.fsServerTimestamp()});
+      await window.fsUpdateDoc(window.fsDoc(window.db,'tasks',data.taskId),{takenBy:data.workerId,status:'taken'});
+      return ref.id;
+    }
+    async function fsGetMyReports(workerId) {
+      if (!window.db) return [];
+      const q = window.fsQuery(window.fsCollection(window.db,'reports'),window.fsWhere('workerId','==',workerId));
+      const snap = await window.fsGetDocs(q);
+      return snap.docs.map(d=>({id:d.id,...d.data()}));
+    }
+
     function loadUsers(){ return []; }
-    function saveUsers(u){ }
+    function saveUsers(u){}
     function loadTasks(){ return window._tasks || []; }
     function saveTasks(t){ window._tasks = t; }
 
@@ -1310,11 +1347,22 @@
       const btn = document.getElementById('loginBtn');
       if(currentUser){
         pub.style.display='none'; cab.classList.add('active'); btn.textContent='Кабінет';
-        document.getElementById('welcomeName').textContent = currentUser.phone;
-        renderUserTasks();
+        document.getElementById('welcomeName').textContent = currentUser.name||currentUser.phone;
+        renderUserTasksAsync();
       } else {
         pub.style.display='grid'; cab.classList.remove('active'); btn.textContent='Замовник';
       }
+    }
+
+    async function renderUserTasksAsync(){
+      let tasks = [];
+      try { tasks = await fsGetMyTasks(currentUser.id); } catch(e) { tasks = loadTasks().filter(t=>t.userId===currentUser.id); }
+      const active = tasks.filter(t=>t.status!=='completed');
+      document.getElementById('tasksCount').textContent = active.length;
+      document.getElementById('completedCount').textContent = tasks.filter(t=>t.status==='completed').length;
+      const c = document.getElementById('tasksList');
+      if(!tasks.length){ c.innerHTML='<div style="text-align:center;padding:60px;color:var(--gray);">У вас поки немає завдань. Створіть перше!</div>'; return; }
+      c.innerHTML = tasks.map(t=>`<div class="task-item"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:12px;"><h4 style="color:var(--orange);">${t.title}</h4><span class="task-tag" style="margin-bottom:0;">${t.service}</span></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;font-size:0.9rem;color:var(--gray);"><div>📍 ${t.location}</div><div>📦 ${t.qty} шт</div><div>💰 ${t.pay} грн</div><div>📅 ${t.date||'не вказано'}</div></div><div style="margin-top:12px;"><span class="task-tag" style="background:${t.status==='active'?'rgba(255,94,0,0.2)':'#333'};color:${t.status==='active'?'var(--orange)':'#888'}">${t.status==='active'?'Активне':'Виконано'}</span></div></div>`).join('');
     }
 
     function renderUserTasks(){
@@ -1378,7 +1426,7 @@
       else { document.getElementById('wAuthBlock').style.display='block'; document.getElementById('wLoggedBlock').style.display='none'; }
       document.getElementById('wizardSummary').innerHTML=`<div>📋 <b>Послуга:</b> ${wizardData.service}</div><div>✏️ <b>Назва:</b> ${wizardData.title}</div><div>📍 <b>Локація:</b> ${wizardData.location}</div><div>📦 <b>Кількість:</b> ${wizardData.qty} шт</div><div>📅 <b>Дата:</b> ${wizardData.date}</div><div>💰 <b>Оплата:</b> ${wizardData.pay} грн</div>`;
     }
-    function wizardSubmit(){
+    async function wizardSubmit(){
       wizardData.qty=document.getElementById('taskQty').value||'—';
       wizardData.date=document.getElementById('taskDate').value||'—';
       wizardData.pay=document.getElementById('taskPay').value||'—';
@@ -1390,9 +1438,20 @@
         if(!user){ user={id:Date.now(),phone,userType:document.getElementById('taskUserType').value,city:'Козятин',createdAt:new Date().toISOString()}; users.push(user); saveUsers(users); }
         currentUser=user; window._currentUser=user;
       }
-      addTask({title:wizardData.title,service:wizardData.service,qty:wizardData.qty,location:wizardData.location,date:wizardData.date,pay:wizardData.pay,details:wizardData.details,phone:currentUser.phone});
       const btn=document.getElementById('submitTaskBtn'); btn.textContent='⏳ Надсилаємо...'; btn.disabled=true;
-      setTimeout(()=>{ btn.textContent='📨 Надіслати завдання'; btn.disabled=false; closeModal(document.getElementById('taskModal')); updateUIByAuth(); alert('✅ Завдання створено!'); },1000);
+      const taskData={title:wizardData.title,service:wizardData.service,qty:wizardData.qty,location:wizardData.location,date:wizardData.date,pay:wizardData.pay,details:wizardData.details,phone:currentUser.phone,userId:currentUser.id,userName:currentUser.name||currentUser.phone};
+      try {
+        await fsAddTask(taskData);
+        btn.textContent='📨 Надіслати завдання'; btn.disabled=false;
+        closeModal(document.getElementById('taskModal'));
+        await renderUserTasksAsync();
+        alert('✅ Завдання створено!');
+      } catch(e) {
+        // fallback — зберігаємо локально
+        addTask(taskData);
+        btn.textContent='📨 Надіслати завдання'; btn.disabled=false;
+        closeModal(document.getElementById('taskModal')); updateUIByAuth(); alert('✅ Завдання створено!');
+      }
     }
     window.wizardChoose=wizardChoose; window.wizardNext=wizardNext; window.wizardNextTitle=wizardNextTitle; window.wizardNextLocation=wizardNextLocation; window.wizardSubmit=wizardSubmit; window.wizardOpen=wizardOpen;
 
@@ -1425,9 +1484,37 @@
         document.getElementById('workerCabinetPage').classList.add('active');
         document.getElementById('workerBtn').textContent='🙋 Кабінет';
         document.getElementById('workerWelcomeName').textContent=currentWorker.name||currentWorker.phone;
-        renderWorkerTasks();
+        renderWorkerTasksAsync();
       }
     }
+
+    async function renderWorkerTasksAsync(){
+      let tasks=[], myReports=[];
+      try {
+        tasks = await fsGetAllActiveTasks();
+        myReports = await fsGetMyReports(currentWorker.id);
+      } catch(e) {
+        tasks=loadTasks().filter(t=>t.status==='active');
+        myReports=loadReports().filter(r=>r.workerId===currentWorker.id);
+      }
+      const takenIds=myReports.map(r=>r.taskId);
+      document.getElementById('workerActiveCount').textContent=takenIds.length;
+      document.getElementById('workerDoneCount').textContent=myReports.filter(r=>r.submitted).length;
+      const c=document.getElementById('workerTasksList');
+      if(!tasks.length){c.innerHTML='<div style="text-align:center;padding:60px;color:var(--gray);">Поки немає доступних завдань</div>';return;}
+      c.innerHTML=tasks.map(task=>{
+        const taken=takenIds.includes(task.id);
+        const report=myReports.find(r=>r.taskId===task.id);
+        return `<div class="task-item"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:12px;"><h4 style="color:var(--orange);">${task.title}</h4><span class="task-tag" style="margin-bottom:0;">${task.service}</span></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;font-size:0.9rem;color:var(--gray);margin-bottom:14px;"><div>📍 ${task.location}</div><div>📦 ${task.qty} шт</div><div>💰 ${task.pay} грн</div></div>${!taken?`<button onclick="takeTaskFs('${task.id}')" style="background:linear-gradient(135deg,var(--orange),var(--red));border:none;color:white;padding:12px 24px;border-radius:12px;font-weight:800;cursor:pointer;width:100%;">✅ Взяти завдання</button>`:`<div style="display:flex;gap:10px;flex-wrap:wrap;"><span style="background:rgba(255,94,0,0.15);color:var(--orange);padding:8px 16px;border-radius:12px;font-weight:700;">✅ Взято</span>${!report?.submitted?`<button onclick="openReport('${task.id}','${(task.title||'').replace(/'/g,"\'")}')" style="background:#222;border:1px solid var(--orange);color:var(--orange);padding:8px 20px;border-radius:12px;font-weight:700;cursor:pointer;">📸 Надіслати звіт</button>`:`<span style="background:#1a3a1a;color:#4cd964;padding:8px 16px;border-radius:12px;font-weight:700;">📸 Звіт надіслано</span>`}</div>`}</div>`;
+      }).join('');
+    }
+
+    window.takeTaskFs = async function(taskId) {
+      try {
+        await fsSubmitReport({taskId, workerId:currentWorker.id, submitted:false, takenAt:new Date().toISOString()});
+      } catch(e) { takeTask(taskId); return; }
+      renderWorkerTasksAsync();
+    };
 
     function renderWorkerTasks(){
       const tasks=loadTasks().filter(t=>t.status==='active');
