@@ -1332,11 +1332,11 @@
     </div>
   </footer>
 
-  <!-- Firebase compat (без module) -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <script>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, doc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
     const firebaseConfig = {
       apiKey: "AIzaSyD-isU4n_s_FkNtJWLsknPOOXcmW_vW-Gk",
       authDomain: "flyerdrop-94343.firebaseapp.com",
@@ -1345,40 +1345,30 @@
       messagingSenderId: "664707562442",
       appId: "1:664707562442:web:1775b4fff13c9383412d33"
     };
-    firebase.initializeApp(firebaseConfig);
-    const _auth = firebase.auth();
-    const _db = firebase.firestore();
-    const _provider = new firebase.auth.GoogleAuthProvider();
 
-    window.db = _db;
-    window.fsCollection = (db, col) => db.collection(col);
-    window.fsAddDoc = (ref, data) => ref.add(data);
-    window.fsGetDocs = (q) => q.get();
-    window.fsQuery = (ref, ...constraints) => {
-      let q = ref;
-      constraints.forEach(c => { q = c(q); });
-      return q;
-    };
-    window.fsWhere = (field, op, val) => (ref) => ref.where(field, op, val);
-    window.fsOrderBy = (field, dir) => (ref) => ref.orderBy(field, dir||'asc');
-    window.fsDoc = (db, col, id) => db.collection(col).doc(id);
-    window.fsUpdateDoc = (ref, data) => ref.update(data);
-    window.fsServerTimestamp = () => firebase.firestore.FieldValue.serverTimestamp();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
 
-    // Адаптер для getDocs - повертає масив документів
-    const _origGetDocs = window.fsGetDocs;
-    window.fsGetDocs = async (q) => {
-      const snap = await (typeof q.get === 'function' ? q.get() : q);
-      return { docs: snap.docs.map(d => ({ id: d.id, data: () => d.data() })) };
-    };
+    window.db = db;
+    window.fsCollection = collection;
+    window.fsAddDoc = addDoc;
+    window.fsGetDocs = getDocs;
+    window.fsQuery = query;
+    window.fsWhere = where;
+    window.fsOrderBy = orderBy;
+    window.fsDoc = doc;
+    window.fsUpdateDoc = updateDoc;
+    window.fsServerTimestamp = serverTimestamp;
 
     window.googleSignIn = async () => {
-      try { await _auth.signInWithPopup(_provider); }
+      try { await signInWithPopup(auth, provider); }
       catch(e) { alert('Помилка: ' + e.message); }
     };
-    window.firebaseSignOut = async () => { await _auth.signOut(); };
+    window.firebaseSignOut = async () => { await signOut(auth); };
 
-    _auth.onAuthStateChanged((user) => {
+    onAuthStateChanged(auth, (user) => {
       window.currentUser = user ? { id: user.uid, phone: user.email, name: user.displayName, photo: user.photoURL } : null;
       if (window._authReady) window._authReady(user);
     });
@@ -1926,9 +1916,17 @@
     document.getElementById('workerGoogleBtn').onclick=()=>window.googleSignIn&&window.googleSignIn();
     document.getElementById('workerAppleBtn').onclick=()=>alert('🍎 Apple вхід — незабаром');
 
-    // ІНІЦІАЛІЗАЦІЯ
-    // currentUser/currentWorker тепер через Firebase onAuthStateChanged
-    if(currentWorker) updateUIByWorkerAuth(); else updateUIByAuth();
+    // ІНІЦІАЛІЗАЦІЯ - чекаємо на Firebase
+    window._authReady = function(user) {
+      if (user) {
+        currentUser = { id: user.uid, phone: user.email, name: user.displayName, photo: user.photoURL };
+      } else {
+        currentUser = null;
+      }
+      if(currentWorker) updateUIByWorkerAuth(); else updateUIByAuth();
+    };
+    // Показуємо публічну частину одразу (без чекання на Firebase)
+    updateUIByAuth();
   </script>
 </body>
 </html>
