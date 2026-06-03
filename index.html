@@ -1034,7 +1034,15 @@ document.getElementById('submitReportBtn').onclick = async function() {
       var data = await res.json();
       photoUrl = data.secure_url||'';
     }
-    await fsUpdate('reports', taskId, {submitted:true, comment:comment, gps:workerGps, photoUrl:photoUrl, submittedAt:new Date().toISOString()});
+    // Знаходимо існуючий report або створюємо новий
+    var existingReports = await fsGet('reports', 'taskId', '==', taskId);
+    var workerReport = existingReports.find(r => r.workerId === currentWorker.id);
+    if (workerReport && workerReport.id) {
+      await fsUpdate('reports', workerReport.id, {submitted:true, comment:comment, gps:workerGps, photoUrl:photoUrl, submittedAt:new Date().toISOString()});
+    } else {
+      await fsAdd('reports', {taskId:taskId, workerId:currentWorker.id, submitted:true, comment:comment, gps:workerGps, photoUrl:photoUrl, submittedAt:new Date().toISOString()});
+    }
+    await fsUpdate('tasks', taskId, {takenBy:currentWorker.id, status:'taken'});
     btn.textContent='✅ Надіслати звіт'; btn.disabled=false;
     closeModal(reportModal);
     alert('✅ Звіт надіслано!');
