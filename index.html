@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>FlyerDrop — Реклама, яка розходиться в руки</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -983,7 +983,7 @@
         <span id="newReportsBadge" style="display:none;background:linear-gradient(135deg,var(--orange),var(--red));color:white;padding:6px 14px;border-radius:20px;font-size:0.85rem;font-weight:800;">Нові звіти!</span>
       </div>
       <div id="reportsList" style="margin-bottom:32px;">
-        <div style="text-align:center;padding:40px;color:var(--gray);">Звіти з&#39;являться після виконання завдань</div>
+        <div style="text-align:center;padding:40px;color:var(--gray);">Звіти з'являться після виконання завдань</div>
       </div>
     </div>
   </div>
@@ -1332,46 +1332,53 @@
     </div>
   </footer>
 
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-    import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, doc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  <script>
+    // Firebase через динамічний import (працює без type=module)
+    (async function() {
+      try {
+        const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+        const { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+        const { getFirestore, collection, addDoc, getDocs, query, where, orderBy, doc, updateDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyD-isU4n_s_FkNtJWLsknPOOXcmW_vW-Gk",
-      authDomain: "flyerdrop-94343.firebaseapp.com",
-      projectId: "flyerdrop-94343",
-      storageBucket: "flyerdrop-94343.firebasestorage.app",
-      messagingSenderId: "664707562442",
-      appId: "1:664707562442:web:1775b4fff13c9383412d33"
-    };
+        const firebaseConfig = {
+          apiKey: "AIzaSyD-isU4n_s_FkNtJWLsknPOOXcmW_vW-Gk",
+          authDomain: "flyerdrop-94343.firebaseapp.com",
+          projectId: "flyerdrop-94343",
+          storageBucket: "flyerdrop-94343.firebasestorage.app",
+          messagingSenderId: "664707562442",
+          appId: "1:664707562442:web:1775b4fff13c9383412d33"
+        };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const provider = new GoogleAuthProvider();
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
 
-    window.db = db;
-    window.fsCollection = collection;
-    window.fsAddDoc = addDoc;
-    window.fsGetDocs = getDocs;
-    window.fsQuery = query;
-    window.fsWhere = where;
-    window.fsOrderBy = orderBy;
-    window.fsDoc = doc;
-    window.fsUpdateDoc = updateDoc;
-    window.fsServerTimestamp = serverTimestamp;
+        window.db = db;
+        window.fsCollection = collection;
+        window.fsAddDoc = addDoc;
+        window.fsGetDocs = getDocs;
+        window.fsQuery = query;
+        window.fsWhere = where;
+        window.fsOrderBy = orderBy;
+        window.fsDoc = doc;
+        window.fsUpdateDoc = updateDoc;
+        window.fsServerTimestamp = serverTimestamp;
 
-    window.googleSignIn = async () => {
-      try { await signInWithPopup(auth, provider); }
-      catch(e) { alert('Помилка: ' + e.message); }
-    };
-    window.firebaseSignOut = async () => { await signOut(auth); };
+        window.googleSignIn = async () => {
+          try { await signInWithPopup(auth, provider); }
+          catch(e) { alert('Помилка: ' + e.message); }
+        };
+        window.firebaseSignOut = async () => { await signOut(auth); };
 
-    onAuthStateChanged(auth, (user) => {
-      window.currentUser = user ? { id: user.uid, phone: user.email, name: user.displayName, photo: user.photoURL } : null;
-      if (window._authReady) window._authReady(user);
-    });
+        onAuthStateChanged(auth, (user) => {
+          window.currentUser = user ? { id: user.uid, phone: user.email, name: user.displayName, photo: user.photoURL } : null;
+          if (window._authReady) window._authReady(user);
+        });
+      } catch(e) {
+        console.warn('Firebase failed to load:', e);
+      }
+    })();
   </script>
 
   <script>
@@ -1480,7 +1487,7 @@
         const rc = document.getElementById('reportsList');
         const badge = document.getElementById('newReportsBadge');
         if (!reports.length) {
-          rc.innerHTML='<div style="text-align:center;padding:40px;color:var(--gray);">Звіти з&#39;являться після виконання завдань</div>';
+          rc.innerHTML='<div style="text-align:center;padding:40px;color:var(--gray);">Звіти з'являться після виконання завдань</div>';
           badge.style.display='none';
         } else {
           badge.style.display='inline-block';
@@ -1515,7 +1522,7 @@
         const rc = document.getElementById('reportsList');
         const badge = document.getElementById('newReportsBadge');
         if (!reports.length) {
-          rc.innerHTML='<div style="text-align:center;padding:40px;color:var(--gray);">Звіти з&#39;являться після виконання завдань</div>';
+          rc.innerHTML='<div style="text-align:center;padding:40px;color:var(--gray);">Звіти з'являться після виконання завдань</div>';
           badge.style.display='none';
         } else {
           badge.style.display='inline-block';
@@ -1916,17 +1923,9 @@
     document.getElementById('workerGoogleBtn').onclick=()=>window.googleSignIn&&window.googleSignIn();
     document.getElementById('workerAppleBtn').onclick=()=>alert('🍎 Apple вхід — незабаром');
 
-    // ІНІЦІАЛІЗАЦІЯ - чекаємо на Firebase
-    window._authReady = function(user) {
-      if (user) {
-        currentUser = { id: user.uid, phone: user.email, name: user.displayName, photo: user.photoURL };
-      } else {
-        currentUser = null;
-      }
-      if(currentWorker) updateUIByWorkerAuth(); else updateUIByAuth();
-    };
-    // Показуємо публічну частину одразу (без чекання на Firebase)
-    updateUIByAuth();
+    // ІНІЦІАЛІЗАЦІЯ
+    // currentUser/currentWorker тепер через Firebase onAuthStateChanged
+    if(currentWorker) updateUIByWorkerAuth(); else updateUIByAuth();
   </script>
 </body>
 </html>
