@@ -610,14 +610,14 @@ footer a:hover{color:var(--orange)}
 <div class="modal-overlay" id="modal-geo-report">
   <div class="modal" style="max-width:480px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h3>📍 Звіт із геолокацією</h3><button onclick="closeAdvModal('geo-report')" style="background:none;border:none;color:#888;font-size:1.6rem;cursor:pointer">✕</button></div>
-    <div style="color:#aaa;line-height:1.8;margin-bottom:16px"><div>📸 Фото з геотегом — не можна підробити</div><div>🕐 Точний час початку і кінця роздачі</div><div>💬 Коментар виконавця</div></div>
+    <div style="color:#aaa;line-height:1.8;margin-bottom:16px"><div id="adv-geo-1-el">📸 Фото з геотегом — не можна підробити</div><div id="adv-geo-2-el">🕐 Точний час початку і кінця роздачі</div><div id="adv-geo-3-el">💬 Коментар виконавця</div></div>
     <button class="btn-primary" onclick="closeAdvModal('geo-report');wizardOpen()" style="width:100%;padding:14px">📍 Замовити з фото-звітом</button>
   </div>
 </div>
 <div class="modal-overlay" id="modal-print">
   <div class="modal" style="max-width:480px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h3>⭐ Друкарська продукція</h3><button onclick="closeAdvModal('print')" style="background:none;border:none;color:#888;font-size:1.6rem;cursor:pointer">✕</button></div>
-    <div style="background:rgba(255,94,0,.1);border:1px solid rgba(255,94,0,.3);border-radius:12px;padding:12px;margin-bottom:14px;font-size:0.88rem">🎁 Замовляй друк + роздачу разом — знижка 10% на друк</div>
+    <div id="adv-print-promo-el" style="background:rgba(255,94,0,.1);border:1px solid rgba(255,94,0,.3);border-radius:12px;padding:12px;margin-bottom:14px;font-size:0.88rem">🎁 Замовляй друк + роздачу разом — знижка 10% на друк</div>
     <button class="btn-primary" onclick="closeAdvModal('print');wizardOpen()" style="width:100%;padding:14px">⭐ Замовити друк + роздачу</button>
   </div>
 </div>
@@ -1327,6 +1327,17 @@ var translations = {
     'adv-order-btn': '📍 Замовити з фото-звітом',
     'adv-print-btn': '⭐ Замовити друк + роздачу',
     'adv-launch-btn': '⚡ Запустити кампанію',
+    'adv-no-mid-1-title': 'Один відповідальний',
+    'adv-no-mid-1-text': 'Виконавець знає своє завдання від початку до кінця',
+    'adv-no-mid-2-title': 'Прямий контакт',
+    'adv-no-mid-2-text': 'Спілкуєтесь напряму з тим, хто роздає ваші матеріали',
+    'adv-geo-1': '📸 Фото з геотегом — не можна підробити',
+    'adv-geo-2': '🕐 Точний час початку і кінця роздачі',
+    'adv-geo-3': '💬 Коментар виконавця',
+    'adv-print-promo': '🎁 Замовляй друк + роздачу разом — знижка 10% на друк',
+    'adv-fast-min': 'хвилин',
+    'adv-fast-avail': 'доступність',
+    'adv-fast-calls': 'дзвінків',
   },
   eng: {
     'nav-login': 'Client',
@@ -1504,6 +1515,17 @@ var translations = {
     'adv-order-btn': '📍 Order with photo report',
     'adv-print-btn': '⭐ Order print + distribution',
     'adv-launch-btn': '⚡ Launch campaign',
+    'adv-no-mid-1-title': 'One responsible person',
+    'adv-no-mid-1-text': 'The executor knows the task from start to finish',
+    'adv-no-mid-2-title': 'Direct contact',
+    'adv-no-mid-2-text': 'You communicate directly with the person distributing your materials',
+    'adv-geo-1': '📸 Photo with geotag — cannot be faked',
+    'adv-geo-2': '🕐 Exact start and end time of distribution',
+    'adv-geo-3': '💬 Executor comment',
+    'adv-print-promo': '🎁 Order print + distribution together — 10% discount on print',
+    'adv-fast-min': 'minutes',
+    'adv-fast-avail': 'availability',
+    'adv-fast-calls': 'calls',
   }
 };
 
@@ -1675,6 +1697,33 @@ window.setLang = function(lang) {
   // Місто / район
   tr('#cityModal h3', 'city-title');
   tr('#districtModal h3', 'district-title');
+
+  // Модалки переваг - вміст
+  tr('#adv-geo-1-el', 'adv-geo-1');
+  tr('#adv-geo-2-el', 'adv-geo-2');
+  tr('#adv-geo-3-el', 'adv-geo-3');
+  tr('#adv-print-promo-el', 'adv-print-promo');
+
+  // No middlemen modal
+  var noMidBoxes = document.querySelectorAll('#modal-no-middlemen .modal>div:nth-child(2)>div');
+  noMidBoxes.forEach(function(box) {
+    var title = box.querySelector('div:first-child');
+    var text = box.querySelector('div:last-child');
+    if(title && text) {
+      var idx = Array.from(noMidBoxes).indexOf(box);
+      if(idx===0){ title.textContent=t['adv-no-mid-1-title']; text.textContent=t['adv-no-mid-1-text']; }
+      if(idx===1){ title.textContent=t['adv-no-mid-2-title']; text.textContent=t['adv-no-mid-2-text']; }
+    }
+  });
+
+  // Кнопки в модалках переваг
+  var advBtns = [
+    ['#modal-no-middlemen button.btn-primary', 'adv-try-btn'],
+    ['#modal-geo-report button.btn-primary', 'adv-order-btn'],
+    ['#modal-print button.btn-primary', 'adv-print-btn'],
+    ['#modal-fast-launch button.btn-primary', 'adv-launch-btn'],
+  ];
+  advBtns.forEach(function(pair){ tr(pair[0], pair[1]); });
 
   // Заголовки секцій
   tr('#how-title', 'how-title');
