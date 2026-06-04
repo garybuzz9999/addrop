@@ -140,6 +140,7 @@ footer a:hover{color:var(--orange)}
 .wizard-nav{display:flex;gap:10px;margin-top:18px}
 .city-btn{width:100%;background:#222;border:1px solid #333;color:#fff;padding:12px 16px;border-radius:12px;font-size:0.95rem;font-weight:600;text-align:left;cursor:pointer;transition:.2s;font-family:'Montserrat',sans-serif;display:flex;justify-content:space-between;align-items:center}
 .city-btn:hover{background:linear-gradient(135deg,var(--orange),var(--red));border-color:transparent}
+.city-btn:disabled{background:#1a1a1a;border-color:#2a2a2a;color:#555;cursor:not-allowed;opacity:0.7}
 .city-select-btn{width:100%;background:#222;border:1px solid #333;color:#fff;padding:12px 16px;border-radius:12px;font-size:0.95rem;font-weight:600;text-align:left;cursor:pointer;transition:.2s;font-family:'Montserrat',sans-serif;margin-bottom:6px}
 .city-select-btn:hover{background:linear-gradient(135deg,var(--orange),var(--red));border-color:transparent}
 .summary-box{background:#1a1a1a;border-radius:14px;padding:14px;margin-top:8px;font-size:0.88rem;line-height:1.8;color:var(--gray)}
@@ -517,7 +518,7 @@ footer a:hover{color:var(--orange)}
     <div class="form-group"><label>📱 Телефон</label><input type="tel" id="workerPhone" placeholder="+38 (0__) ___ __ __"></div>
     <div class="form-group"><label>👤 Ім'я</label><input type="text" id="workerName" placeholder="Ваше ім'я"></div>
     <div class="form-group"><label>📍 Місто</label>
-      <button type="button" class="city-btn" id="workerCityBtn" onclick="openModal(cityModal)">
+      <button type="button" class="city-btn" id="workerCityBtn" onclick="openModal(document.getElementById('cityModal'))">
         <span id="workerCityLabel">🏙️ Оберіть місто</span><span style="color:#666">›</span>
       </button>
       <input type="hidden" id="workerCity">
@@ -559,7 +560,7 @@ footer a:hover{color:var(--orange)}
       <button onclick="selectCity('Київ')" class="city-select-btn">🏙️ Київ</button>
       <div style="padding:12px;border-radius:10px;background:#1a1a1a;color:#555;font-size:0.88rem;text-align:center">Інші міста — незабаром</div>
     </div>
-    <div class="modal-footer"><button class="btn-modal-secondary" onclick="closeModal(cityModal)">Скасувати</button></div>
+    <div class="modal-footer"><button class="btn-modal-secondary" onclick="closeModal(document.getElementById('cityModal'))">Скасувати</button></div>
   </div>
 </div>
 
@@ -568,7 +569,7 @@ footer a:hover{color:var(--orange)}
   <div class="modal" style="max-width:380px;max-height:80vh;overflow-y:auto">
     <h3>🏘️ Оберіть район</h3>
     <div style="display:flex;flex-direction:column;gap:6px;margin-top:14px" id="districtList"></div>
-    <div class="modal-footer"><button class="btn-modal-secondary" onclick="closeModal(districtModal)">Скасувати</button></div>
+    <div class="modal-footer"><button class="btn-modal-secondary" onclick="closeModal(document.getElementById('districtModal'))">Скасувати</button></div>
   </div>
 </div>
 
@@ -1099,20 +1100,20 @@ window.selectCity = function(city) {
   document.getElementById('workerDistrictBtn').disabled = false;
   document.getElementById('workerDistrictLabel').textContent = 'Оберіть район';
   document.getElementById('workerDistrictLabel').style.color = '#666';
-  closeModal(cityModal);
+  closeModal(document.getElementById('cityModal'));
 };
 window.openDistrictModal = function() {
   var city = document.getElementById('workerCity').value;
   if (!city) return;
   var list = cityDistricts[city]||[];
   document.getElementById('districtList').innerHTML = list.map(d => '<button class="city-select-btn" onclick="selectDistrict(\'' + d + '\')">' + d + '</button>').join('');
-  openModal(districtModal);
+  openModal(document.getElementById('districtModal'));
 };
 window.selectDistrict = function(d) {
   document.getElementById('workerDistrict').value = d;
   document.getElementById('workerDistrictLabel').textContent = '🏘️ ' + d;
   document.getElementById('workerDistrictLabel').style.color = '#fff';
-  closeModal(districtModal);
+  closeModal(document.getElementById('districtModal'));
 };
 
 // SERVICE
