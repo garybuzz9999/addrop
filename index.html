@@ -658,10 +658,24 @@ footer a:hover{color:var(--orange)}
   </div>
 </div>
 
+<!-- PRIVACY POLICY MODAL -->
+<div class="modal-overlay" id="privacyModal" style="z-index:6000">
+  <div class="modal-box" style="max-width:600px;max-height:80vh;overflow-y:auto">
+    <div id="privacyContent">
+      <!-- rendered by JS -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-primary" onclick="closeModal(document.getElementById('privacyModal'))">
+        <span data-lang="uk">Закрити</span><span data-lang="en" style="display:none">Close</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <footer>
   <p>© 2026 FlyerDrop. Всі права захищені.</p>
   <div style="display:flex;gap:16px;flex-wrap:wrap">
-    <a href="#">Політика конфіденційності</a>
+    <a href="#" id="privacyLink">Політика конфіденційності</a>
     <a href="#">Умови користування</a>
     <a href="mailto:ckbbuild@gmail.com">ckbbuild@gmail.com</a>
     <a href="#" id="adminLink" style="color:var(--orange)">Адмін</a>
@@ -1064,6 +1078,56 @@ document.getElementById('submitReportBtn').onclick = async function() {
 // ADMIN
 document.getElementById('adminLink').onclick = function(e) { e.preventDefault(); openModal(adminModal); };
 document.getElementById('closeAdminBtn').onclick = function() { closeModal(adminModal); };
+
+// PRIVACY POLICY
+var PRIVACY_TEXT = {
+  uk: {
+    title: 'Політика конфіденційності FlyerDrop',
+    sections: [
+      {h:'1. Загальні положення', t:'Ця Політика конфіденційності описує, як FlyerDrop збирає, використовує та захищає вашу особисту інформацію.'},
+      {h:'2. Які дані ми збираємо', list:["Ім\'я та прізвище","Адреса електронної пошти","Номер телефону","IBAN (для виплат роздавальникам)","Геолокація (при надсиланні звіту)","Фото (при надсиланні звіту)","Дані Google-акаунта (при вході через Google)"]},
+      {h:'3. Як ми використовуємо ваші дані', list:["Для створення та виконання завдань","Для зв\'язку між замовником та виконавцем","Для підтвердження виконання роботи (GPS, фото)","Для здійснення виплат (IBAN)","Для покращення роботи сервісу"]},
+      {h:'4. Передача даних третім особам', t:'FlyerDrop не продає і не передає ваші персональні дані третім особам, за винятком випадків, передбачених законодавством України.'},
+      {h:'5. Ваші права', list:["Отримувати інформацію про ваші дані","Вимагати видалення ваших даних","Відкликати згоду на обробку даних"]},
+      {h:'6. Зберігання даних', t:'Ваші дані зберігаються в захищеній базі даних Firebase (Google Cloud). Ми вживаємо всіх розумних заходів для захисту вашої інформації.'},
+      {h:'7. Зміни в політиці', t:'Ми можемо час від часу оновлювати цю Політику. Про суттєві зміни ми повідомимо вас через сайт або електронною поштою.'},
+      {h:'8. Контакти', t:'Якщо у вас є питання щодо цієї Політики, будь ласка, зверніться: ckbbuild@gmail.com'}
+    ]
+  },
+  en: {
+    title: 'FlyerDrop Privacy Policy',
+    sections: [
+      {h:'1. General Provisions', t:'This Privacy Policy describes how FlyerDrop collects, uses and protects your personal information.'},
+      {h:'2. What data we collect', list:['First and last name','Email address','Phone number','IBAN (for distributor payouts)','Geolocation (when submitting a report)','Photos (when submitting a report)','Google account data (when logging in via Google)']},
+      {h:'3. How we use your data', list:['To create and perform tasks','To communicate between client and distributor','To verify task completion (GPS, photos)','To process payouts (IBAN)','To improve the service']},
+      {h:'4. Data transfer to third parties', t:'FlyerDrop does not sell or transfer your personal data to third parties, except as required by Ukrainian law.'},
+      {h:'5. Your rights', list:['Access your data','Request deletion of your data','Withdraw consent for data processing']},
+      {h:'6. Data storage', t:'Your data is stored in a secure Firebase database (Google Cloud). We take all reasonable measures to protect your information.'},
+      {h:'7. Changes to the policy', t:'We may update this Policy from time to time. We will notify you of material changes via the website or email.'},
+      {h:'8. Contact', t:'If you have any questions about this Policy, please contact us: ckbbuild@gmail.com'}
+    ]
+  }
+};
+function renderPrivacy(lang) {
+  var d = PRIVACY_TEXT[lang] || PRIVACY_TEXT['uk'];
+  var html = '<h3 style="font-family:\'Montserrat\',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:20px;color:#fff">' + d.title + '</h3>';
+  d.sections.forEach(function(s) {
+    html += '<p style="font-weight:700;color:#fff;margin:16px 0 6px;font-size:.9rem">' + s.h + '</p>';
+    if(s.t) html += '<p style="color:#aaa;font-size:.85rem;line-height:1.7">' + s.t + '</p>';
+    if(s.list) {
+      html += '<ul style="color:#aaa;font-size:.85rem;line-height:1.9;padding-left:18px">';
+      s.list.forEach(function(li){ html += '<li>' + li + '</li>'; });
+      html += '</ul>';
+    }
+  });
+  document.getElementById('privacyContent').innerHTML = html;
+}
+document.getElementById('privacyLink').onclick = function(e) {
+  e.preventDefault();
+  var lang = (typeof currentLang !== 'undefined' && currentLang === 'eng') ? 'en' : 'uk';
+  renderPrivacy(lang);
+  openModal(document.getElementById('privacyModal'));
+};
 document.getElementById('submitAdminBtn').onclick = async function() {
   if (document.getElementById('adminPassword').value !== 'admin123') { alert('Невірний пароль'); return; }
   closeModal(adminModal);
