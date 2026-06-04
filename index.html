@@ -191,7 +191,13 @@ footer a:hover{color:var(--orange)}
   <div class="badge"><span class="badge-dot"></span><span style="font-size:.85rem;font-weight:800">Промоутерів <span style="color:var(--orange)">500+</span> вже на платформі</span></div>
   <h1><span>FlyerDrop</span> — Реклама, яка розходиться в руки</h1>
   <p>Флаєри, акції, пробники, друк — підберемо роздавальників за 5 хвилин. Запускай рекламні кампанії швидко та без зайвих посередників.</p>
-  <button class="btn-cta" id="ctaBtn">Створити завдання</button>
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:0">
+    <button class="btn-cta" id="ctaBtn" style="flex:1;min-width:200px;margin:0">Створити завдання</button>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <button id="langUkr" onclick="setLang('ukr')" style="background:linear-gradient(135deg,#005BBB,#FFD500);color:#fff;border:none;padding:10px 14px;border-radius:10px;font-weight:900;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:0.85rem">🇺🇦 UKR</button>
+      <button id="langEng" onclick="setLang('eng')" style="background:#222;color:#fff;border:2px solid #444;padding:10px 14px;border-radius:10px;font-weight:900;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:0.85rem">🇬🇧 ENG</button>
+    </div>
+  </div>
 </section>
 
 <!-- MAIN LAYOUT -->
@@ -1141,6 +1147,15 @@ window.wGo = wGo;
 window.wNextTitle = wNextTitle;
 window.wNextLocation = wNextLocation;
 window.wSubmit = wSubmit;
+
+// LANG
+window.setLang = function(lang) {
+  document.getElementById('langUkr').style.background = lang==='ukr' ? 'linear-gradient(135deg,#005BBB,#FFD500)' : '#222';
+  document.getElementById('langUkr').style.border = lang==='ukr' ? 'none' : '2px solid #444';
+  document.getElementById('langEng').style.background = lang==='eng' ? 'linear-gradient(135deg,#012169,#C8102E)' : '#222';
+  document.getElementById('langEng').style.border = lang==='eng' ? 'none' : '2px solid #444';
+  alert(lang==='eng' ? '🇬🇧 English version coming soon!' : '🇺🇦 Українська мова активна');
+};
 
 // INIT
 updateUI();
