@@ -1338,6 +1338,9 @@ var translations = {
     'adv-fast-min': 'хвилин',
     'adv-fast-avail': 'доступність',
     'adv-fast-calls': 'дзвінків',
+    'adv-fast-min-full': 'хвилин на старт',
+    'adv-fast-avail-full': 'доступність',
+    'adv-fast-calls-full': 'зайвих дзвінків',
   },
   eng: {
     'nav-login': 'Client',
@@ -1526,6 +1529,9 @@ var translations = {
     'adv-fast-min': 'minutes',
     'adv-fast-avail': 'availability',
     'adv-fast-calls': 'calls',
+    'adv-fast-min-full': 'minutes to start',
+    'adv-fast-avail-full': 'availability',
+    'adv-fast-calls-full': 'extra calls',
   }
 };
 
@@ -1724,6 +1730,9 @@ window.setLang = function(lang) {
     ['#modal-fast-launch button.btn-primary', 'adv-launch-btn'],
   ];
   advBtns.forEach(function(pair){ tr(pair[0], pair[1]); });
+  tr('#fast-min', 'adv-fast-min-full');
+  tr('#fast-avail', 'adv-fast-avail-full');
+  tr('#fast-calls', 'adv-fast-calls-full');
 
   // Заголовки секцій
   tr('#how-title', 'how-title');
