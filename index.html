@@ -223,7 +223,7 @@ footer a:hover{color:var(--orange)}
     <!-- DEFAULT -->
     <div id="service-default">
       <section>
-        <h2 class="section-title">Як це працює</h2>
+        <h2 class="section-title" id="how-title">Як це працює</h2>
         <div class="cards">
           <div class="card"><div class="card-num">1</div><h3>Обираєш послугу</h3><p style="color:#ccc;line-height:1.5;margin-top:8px">Флаєри, пробники, купони, акції</p></div>
           <div class="card"><div class="card-num">2</div><h3>Вказуєш локацію</h3><p style="color:#ccc;line-height:1.5;margin-top:8px">Козятин та Вінниця</p></div>
@@ -232,7 +232,8 @@ footer a:hover{color:var(--orange)}
         </div>
       </section>
       <section>
-        <h2 class="section-title">Чому FlyerDrop?</h2>
+        <h2 class="section-title" id="why-title">Чому FlyerDrop?</h2>
+        <h2 class="section-title" id="why-title">Чому FlyerDrop?</h2>
         <div class="advantages">
           <div class="adv" onclick="openAdvModal('no-middlemen')">🚀 Без посередників</div>
           <div class="adv" onclick="openAdvModal('geo-report')">📍 Звіт із геолокацією</div>
@@ -241,7 +242,7 @@ footer a:hover{color:var(--orange)}
         </div>
       </section>
       <section>
-        <h2 class="section-title">Приклади завдань</h2>
+        <h2 class="section-title" id="examples-title">Приклади завдань</h2>
         <div class="tasks-grid">
           <div class="task-card"><div class="tag">Флаєри</div><h4>Роздача в ТРЦ</h4><p style="color:#bcbcbc;margin-top:8px;line-height:1.5">Рекламна кампанія для магазину</p></div>
           <div class="task-card"><div class="tag">Акції</div><h4>Промо біля зупинок</h4><p style="color:#bcbcbc;margin-top:8px;line-height:1.5">Роздача купонів у годину пік</p></div>
@@ -1214,6 +1215,17 @@ var translations = {
     'worker-auth-cancel': 'Скасувати',
     'worker-auth-submit': 'Увійти / Зареєструватись',
     'admin-link': 'Адмін',
+    'how-title': 'Як це працює',
+    'why-title': 'Чому FlyerDrop?',
+    'examples-title': 'Приклади завдань',
+    'example1-title': 'Роздача в ТРЦ',
+    'example1-text': 'Рекламна кампанія для магазину',
+    'example2-title': 'Промо біля зупинок',
+    'example2-text': 'Роздача купонів у годину пік',
+    'example3-title': 'Семплінг продукції',
+    'example3-text': 'Розповсюдження пробників косметики',
+    'example4-title': 'Рознос друку',
+    'example4-text': 'Доставка по житлових кварталах',
 
     // Сервіси
     'flyers-title': '📄 Роздача флаєрів',
@@ -1380,6 +1392,17 @@ var translations = {
     'worker-auth-cancel': 'Cancel',
     'worker-auth-submit': 'Login / Register',
     'admin-link': 'Admin',
+    'how-title': 'How it works',
+    'why-title': 'Why FlyerDrop?',
+    'examples-title': 'Task examples',
+    'example1-title': 'Distribution in mall',
+    'example1-text': 'Ad campaign for a store',
+    'example2-title': 'Promo near stops',
+    'example2-text': 'Coupon distribution at rush hour',
+    'example3-title': 'Product sampling',
+    'example3-text': 'Cosmetics samples distribution',
+    'example4-title': 'Newspaper delivery',
+    'example4-text': 'Delivery to residential areas',
 
     // Services
     'flyers-title': '📄 Flyer distribution',
@@ -1488,6 +1511,7 @@ var currentLang = 'ukr';
 
 window.setLang = function(lang) {
   currentLang = lang;
+  try { localStorage.setItem('fdLang', lang); } catch(e) {}
   var t = translations[lang];
 
   // Хедер
@@ -1651,10 +1675,24 @@ window.setLang = function(lang) {
   // Місто / район
   tr('#cityModal h3', 'city-title');
   tr('#districtModal h3', 'district-title');
+
+  // Заголовки секцій
+  tr('#how-title', 'how-title');
+  tr('#why-title', 'why-title');
+  tr('#examples-title', 'examples-title');
+
+  // Приклади завдань
+  var exCards = document.querySelectorAll('.tasks-grid .task-card');
+  if(exCards[0]){ exCards[0].querySelector('h4').textContent=t['example1-title']; exCards[0].querySelector('p').textContent=t['example1-text']; }
+  if(exCards[1]){ exCards[1].querySelector('h4').textContent=t['example2-title']; exCards[1].querySelector('p').textContent=t['example2-text']; }
+  if(exCards[2]){ exCards[2].querySelector('h4').textContent=t['example3-title']; exCards[2].querySelector('p').textContent=t['example3-text']; }
+  if(exCards[3]){ exCards[3].querySelector('h4').textContent=t['example4-title']; exCards[3].querySelector('p').textContent=t['example4-text']; }
 };
 
 // INIT
 updateUI();
+// Відновлюємо мову
+try { var savedLang = localStorage.getItem('fdLang'); if(savedLang) window.setLang(savedLang); } catch(e) {}
 </script>
 </body>
 </html>
