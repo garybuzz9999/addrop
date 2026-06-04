@@ -625,9 +625,9 @@ footer a:hover{color:var(--orange)}
   <div class="modal" style="max-width:480px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h3>⚡ Швидкий запуск</h3><button onclick="closeAdvModal('fast-launch')" style="background:none;border:none;color:#888;font-size:1.6rem;cursor:pointer">✕</button></div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;text-align:center">
-      <div style="background:#1a1a1a;border-radius:10px;padding:10px"><div style="font-size:1.4rem;font-weight:900;color:var(--orange)">5</div><div style="font-size:0.72rem;color:#888">хвилин</div></div>
-      <div style="background:#1a1a1a;border-radius:10px;padding:10px"><div style="font-size:1.4rem;font-weight:900;color:var(--orange)">24/7</div><div style="font-size:0.72rem;color:#888">доступність</div></div>
-      <div style="background:#1a1a1a;border-radius:10px;padding:10px"><div style="font-size:1.4rem;font-weight:900;color:var(--orange)">0</div><div style="font-size:0.72rem;color:#888">дзвінків</div></div>
+      <div style="background:#1a1a1a;border-radius:10px;padding:10px"><div style="font-size:1.4rem;font-weight:900;color:var(--orange)">5</div><div id="fast-min" style="font-size:0.72rem;color:#888" data-ukr="хвилин" data-eng="minutes">хвилин</div></div>
+      <div style="background:#1a1a1a;border-radius:10px;padding:10px"><div style="font-size:1.4rem;font-weight:900;color:var(--orange)">24/7</div><div id="fast-avail" style="font-size:0.72rem;color:#888" data-ukr="доступність" data-eng="availability">доступність</div></div>
+      <div style="background:#1a1a1a;border-radius:10px;padding:10px"><div style="font-size:1.4rem;font-weight:900;color:var(--orange)">0</div><div id="fast-calls" style="font-size:0.72rem;color:#888" data-ukr="дзвінків" data-eng="no calls">дзвінків</div></div>
     </div>
     <button class="btn-primary" onclick="closeAdvModal('fast-launch');wizardOpen()" style="width:100%;padding:14px">⚡ Запустити кампанію</button>
   </div>
@@ -1138,7 +1138,10 @@ window.toggleFaq = function(el) {
 };
 
 // ADV MODALS
-window.openAdvModal = function(id) { openModal(document.getElementById('modal-'+id)); };
+window.openAdvModal = function(id) {
+  openModal(document.getElementById('modal-'+id));
+  if(currentLang && currentLang !== 'ukr') window.setLang(currentLang);
+};
 window.closeAdvModal = function(id) { closeModal(document.getElementById('modal-'+id)); };
 
 // WIZARD globals
@@ -1733,6 +1736,11 @@ window.setLang = function(lang) {
   tr('#fast-min', 'adv-fast-min-full');
   tr('#fast-avail', 'adv-fast-avail-full');
   tr('#fast-calls', 'adv-fast-calls-full');
+
+  // Всі елементи з data-ukr/data-eng
+  document.querySelectorAll('[data-ukr]').forEach(function(el) {
+    el.textContent = lang === 'eng' ? el.getAttribute('data-eng') : el.getAttribute('data-ukr');
+  });
 
   // Заголовки секцій
   tr('#how-title', 'how-title');
