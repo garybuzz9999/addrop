@@ -1149,12 +1149,508 @@ window.wNextLocation = wNextLocation;
 window.wSubmit = wSubmit;
 
 // LANG
+var translations = {
+  ukr: {
+    'nav-login': 'Замовник',
+    'nav-worker': '🙋 Роздавальник',
+    'hero-badge': 'Промоутерів <span style="color:var(--orange)">500+</span> вже на платформі',
+    'hero-title': '<span>FlyerDrop</span> — Реклама, яка розходиться в руки',
+    'hero-sub': 'Флаєри, акції, пробники, друк — підберемо роздавальників за 5 хвилин. Запускай рекламні кампанії швидко та без зайвих посередників.',
+    'hero-cta': 'Створити завдання',
+    'sidebar-title': 'Послуги',
+    'sb-flyers': '📄 Флаєри',
+    'sb-aktsii': '🎯 Акції',
+    'sb-print': '📰 Печатна продукція',
+    'sb-kupony': '📦 Купони',
+    'sb-probnyky': '🛍️ Пробники',
+    'sb-gazety': '🗞️ Газети',
+    'sb-inshe': '⚡ Інше',
+    'sec-how-title': 'Як це працює',
+    'card1-title': 'Обираєш послугу',
+    'card1-text': 'Флаєри, пробники, купони, акції',
+    'card2-title': 'Вказуєш локацію',
+    'card2-text': 'Козятин та Вінниця',
+    'card3-title': 'Отримуєш пропозиції',
+    'card3-text': 'Роздавальники відгукуються',
+    'card4-title': 'Запускаєш кампанію',
+    'card4-text': 'Отримуй звіти з фото',
+    'sec-why-title': 'Чому FlyerDrop?',
+    'adv1': '🚀 Без посередників',
+    'adv2': '📍 Звіт із геолокацією',
+    'adv3': '⭐ Друкарська продукція',
+    'adv4': '⚡ Швидкий запуск',
+    'sec-examples-title': 'Приклади завдань',
+    'footer-copy': '© 2026 FlyerDrop. Всі права захищені.',
+    'footer-privacy': 'Політика конфіденційності',
+    'footer-terms': 'Умови користування',
+    'footer-admin': 'Адмін',
+    'cab-title': 'Особистий кабінет',
+    'cab-logout': 'Вийти',
+    'cab-active': 'Активних',
+    'cab-done': 'Виконано',
+    'cab-tasks': 'Мої завдання',
+    'cab-new-task': '+ Нове завдання',
+    'cab-reports': '📸 Звіти виконавців',
+    'worker-cab-title': '🙋 Кабінет роздавальника',
+    'worker-logout': 'Вийти',
+    'worker-taken': 'Взято',
+    'worker-done': 'Виконано',
+    'profile-title': '👤 Мій профіль',
+    'profile-save': 'Зберегти',
+    'profile-name-label': 'ПІБ',
+    'profile-phone-label': 'Телефон',
+    'profile-iban-label': '🏦 IBAN для отримання оплати',
+    'tasks-title': '📋 Доступні завдання',
+    'auth-title': 'Вхід / Реєстрація',
+    'auth-sub': 'Увійдіть, щоб створювати завдання',
+    'auth-phone': '📱 Телефон',
+    'auth-type': 'Тип особи',
+    'auth-city': '📍 Місто',
+    'auth-address': '🏠 Адреса',
+    'auth-cancel': 'Скасувати',
+    'auth-submit': 'Увійти / Зареєструватися',
+    'worker-auth-title': '🙋 Вхід роздавальника',
+    'worker-auth-sub': 'Знаходь завдання поруч та заробляй',
+    'worker-auth-cancel': 'Скасувати',
+    'worker-auth-submit': 'Увійти / Зареєструватись',
+    'admin-link': 'Адмін',
+
+    // Сервіси
+    'flyers-title': '📄 Роздача флаєрів',
+    'flyers-sub': 'Офлайн-реклама, яка потрапляє прямо в руки аудиторії',
+    'flyers-stat1': 'Роздавальників',
+    'flyers-stat2': 'До запуску',
+    'flyers-stat3': 'За 1 флаєр',
+    'flyers-stat4': 'Задоволених',
+    'flyers-formats': 'Формати роздачі',
+    'flyers-prices': 'Орієнтовні ціни',
+    'flyers-faq': 'Часті запитання',
+    'flyers-cta-title': 'Готові запустити роздачу?',
+    'flyers-cta-sub': 'Створіть завдання за 2 хвилини',
+    'flyers-cta-btn': '📋 Створити завдання безкоштовно',
+
+    'aktsii-title': '🎯 Промо-акції',
+    'aktsii-sub': 'Агресивне залучення клієнтів у потрібному місці та часі',
+    'aktsii-cta-title': 'Запустіть акцію сьогодні',
+    'aktsii-cta-sub': 'Промоутери виходять за 15 хвилин',
+    'aktsii-cta-btn': '📋 Створити завдання',
+
+    'print-title': '📰 Печатна продукція',
+    'print-sub': 'Буклети, каталоги, листівки — розповсюдження будь-яких матеріалів',
+    'print-cta-title': 'Є матеріали — ми розповсюдимо',
+    'print-cta-btn': '📋 Створити завдання',
+
+    'kupony-title': '📦 Купони та знижки',
+    'kupony-sub': 'Купони в руках працюють краще за будь-яку онлайн-рекламу',
+    'kupony-cta-title': 'Запустіть купонну кампанію',
+    'kupony-cta-btn': '📋 Створити завдання',
+
+    'probnyky-title': '🛍️ Семплінг та пробники',
+    'probnyky-sub': 'Дайте спробувати — і клієнт повернеться',
+    'probnyky-cta-title': 'Нехай продукт говорить сам за себе',
+    'probnyky-cta-btn': '📋 Створити завдання',
+
+    'gazety-title': '🗞️ Рознос газет та журналів',
+    'gazety-sub': 'Адресна доставка видань по скриньках або під двері',
+    'gazety-cta-title': 'Ваше видання — до кожного будинку',
+    'gazety-cta-btn': '📋 Створити завдання',
+
+    'inshe-title': '⚡ Інші послуги',
+    'inshe-sub': 'Нестандартне завдання? Наші виконавці впораються',
+    'inshe-cta-title': 'Опишіть завдання — знайдемо виконавця',
+    'inshe-cta-btn': '📋 Створити завдання',
+
+    // Wizard
+    'wiz-step1-title': 'Що потрібно розповсюдити?',
+    'wiz-step1-sub': 'Крок 1 з 6',
+    'wiz-cancel': 'Скасувати',
+    'wiz-next': 'Далі →',
+    'wiz-back': '← Назад',
+    'wiz-step2-title': 'Назва кампанії',
+    'wiz-step2-sub': 'Крок 2 з 6',
+    'wiz-step3-title': 'Де проводити роздачу?',
+    'wiz-step3-sub': 'Крок 3 з 6',
+    'wiz-step4-title': 'Кількість та дата',
+    'wiz-step4-sub': 'Крок 4 з 6',
+    'wiz-step5-title': 'Оплата та вимоги',
+    'wiz-step5-sub': 'Крок 5 з 6',
+    'wiz-step6-title': 'Майже готово!',
+    'wiz-step6-sub': 'Крок 6 з 6',
+    'wiz-submit': '📨 Надіслати завдання',
+
+    // Модалка звіту
+    'report-title': '📸 Фото-звіт',
+    'report-photo-label': '📸 Фото з місця роздачі',
+    'report-comment-label': '💬 Коментар',
+    'report-cancel': 'Скасувати',
+    'report-submit': '✅ Надіслати звіт',
+
+    // Оплата
+    'pay-title': '💳 Оплата завдання',
+    'pay-liqpay': 'Оплатити через LiqPay',
+    'pay-mono': 'Оплатити через Monobank',
+    'pay-invoice-title': '📧 Отримати рахунок на email',
+    'pay-invoice-sub': 'Вкажіть email — надішлемо рахунок з IBAN',
+    'pay-invoice-btn': '📨 Надіслати запит на рахунок',
+
+    // Адмін
+    'admin-title': '👑 Адмін панель',
+    'admin-enter': 'Увійти',
+    'admin-panel-title': '📊 Адмін панель',
+    'admin-close': 'Закрити',
+    'admin-payments': '💰 Запити на оплату',
+    'admin-confirm-pay': '✅ Підтвердити оплату',
+
+    // Місто
+    'city-title': '🏙️ Оберіть місто',
+    'district-title': '🏘️ Оберіть район',
+    'city-cancel': 'Скасувати',
+
+    // Переваги
+    'adv-no-mid-title': '🚀 Без посередників',
+    'adv-geo-title': '📍 Звіт із геолокацією',
+    'adv-print-title': '⭐ Друкарська продукція',
+    'adv-fast-title': '⚡ Швидкий запуск',
+    'adv-try-btn': '🚀 Спробувати зараз',
+    'adv-order-btn': '📍 Замовити з фото-звітом',
+    'adv-print-btn': '⭐ Замовити друк + роздачу',
+    'adv-launch-btn': '⚡ Запустити кампанію',
+  },
+  eng: {
+    'nav-login': 'Client',
+    'nav-worker': '🙋 Distributor',
+    'hero-badge': 'Promoters <span style="color:var(--orange)">500+</span> already on platform',
+    'hero-title': '<span>FlyerDrop</span> — Advertising that reaches hands',
+    'hero-sub': 'Flyers, promos, samples, print — we find distributors in 5 minutes. Launch ad campaigns fast and without middlemen.',
+    'hero-cta': 'Create task',
+    'sidebar-title': 'Services',
+    'sb-flyers': '📄 Flyers',
+    'sb-aktsii': '🎯 Promotions',
+    'sb-print': '📰 Print materials',
+    'sb-kupony': '📦 Coupons',
+    'sb-probnyky': '🛍️ Samples',
+    'sb-gazety': '🗞️ Newspapers',
+    'sb-inshe': '⚡ Other',
+    'sec-how-title': 'How it works',
+    'card1-title': 'Choose service',
+    'card1-text': 'Flyers, samples, coupons, promos',
+    'card2-title': 'Set location',
+    'card2-text': 'Koziatyn and Vinnytsia',
+    'card3-title': 'Get offers',
+    'card3-text': 'Distributors respond',
+    'card4-title': 'Launch campaign',
+    'card4-text': 'Get photo reports',
+    'sec-why-title': 'Why FlyerDrop?',
+    'adv1': '🚀 No middlemen',
+    'adv2': '📍 GPS-verified reports',
+    'adv3': '⭐ Print materials',
+    'adv4': '⚡ Fast launch',
+    'sec-examples-title': 'Task examples',
+    'footer-copy': '© 2026 FlyerDrop. All rights reserved.',
+    'footer-privacy': 'Privacy Policy',
+    'footer-terms': 'Terms of Use',
+    'footer-admin': 'Admin',
+    'cab-title': 'Personal cabinet',
+    'cab-logout': 'Logout',
+    'cab-active': 'Active',
+    'cab-done': 'Completed',
+    'cab-tasks': 'My tasks',
+    'cab-new-task': '+ New task',
+    'cab-reports': '📸 Executor reports',
+    'worker-cab-title': '🙋 Distributor cabinet',
+    'worker-logout': 'Logout',
+    'worker-taken': 'Taken',
+    'worker-done': 'Completed',
+    'profile-title': '👤 My profile',
+    'profile-save': 'Save',
+    'profile-name-label': 'Full name',
+    'profile-phone-label': 'Phone',
+    'profile-iban-label': '🏦 IBAN for payment',
+    'tasks-title': '📋 Available tasks',
+    'auth-title': 'Login / Register',
+    'auth-sub': 'Sign in to create tasks',
+    'auth-phone': '📱 Phone',
+    'auth-type': 'Person type',
+    'auth-city': '📍 City',
+    'auth-address': '🏠 Address',
+    'auth-cancel': 'Cancel',
+    'auth-submit': 'Login / Register',
+    'worker-auth-title': '🙋 Distributor login',
+    'worker-auth-sub': 'Find tasks nearby and earn',
+    'worker-auth-cancel': 'Cancel',
+    'worker-auth-submit': 'Login / Register',
+    'admin-link': 'Admin',
+
+    // Services
+    'flyers-title': '📄 Flyer distribution',
+    'flyers-sub': 'Offline advertising that reaches your audience directly',
+    'flyers-stat1': 'Distributors',
+    'flyers-stat2': 'To launch',
+    'flyers-stat3': 'Per flyer',
+    'flyers-stat4': 'Satisfied',
+    'flyers-formats': 'Distribution formats',
+    'flyers-prices': 'Estimated prices',
+    'flyers-faq': 'FAQ',
+    'flyers-cta-title': 'Ready to launch distribution?',
+    'flyers-cta-sub': 'Create a task in 2 minutes',
+    'flyers-cta-btn': '📋 Create task for free',
+
+    'aktsii-title': '🎯 Promo campaigns',
+    'aktsii-sub': 'Aggressive customer acquisition at the right place and time',
+    'aktsii-cta-title': 'Launch a campaign today',
+    'aktsii-cta-sub': 'Promoters start in 15 minutes',
+    'aktsii-cta-btn': '📋 Create task',
+
+    'print-title': '📰 Print materials',
+    'print-sub': 'Booklets, catalogues, leaflets — distribution of any materials',
+    'print-cta-title': 'Have materials — we distribute',
+    'print-cta-btn': '📋 Create task',
+
+    'kupony-title': '📦 Coupons & discounts',
+    'kupony-sub': 'Coupons in hands work better than any online ad',
+    'kupony-cta-title': 'Launch a coupon campaign',
+    'kupony-cta-btn': '📋 Create task',
+
+    'probnyky-title': '🛍️ Sampling & testers',
+    'probnyky-sub': 'Let them try — and the customer will come back',
+    'probnyky-cta-title': 'Let the product speak for itself',
+    'probnyky-cta-btn': '📋 Create task',
+
+    'gazety-title': '🗞️ Newspaper delivery',
+    'gazety-sub': 'Targeted delivery to mailboxes or doors',
+    'gazety-cta-title': 'Your publication — to every home',
+    'gazety-cta-btn': '📋 Create task',
+
+    'inshe-title': '⚡ Other services',
+    'inshe-sub': 'Non-standard task? Our executors will handle it',
+    'inshe-cta-title': 'Describe the task — we find an executor',
+    'inshe-cta-btn': '📋 Create task',
+
+    // Wizard
+    'wiz-step1-title': 'What needs to be distributed?',
+    'wiz-step1-sub': 'Step 1 of 6',
+    'wiz-cancel': 'Cancel',
+    'wiz-next': 'Next →',
+    'wiz-back': '← Back',
+    'wiz-step2-title': 'Campaign name',
+    'wiz-step2-sub': 'Step 2 of 6',
+    'wiz-step3-title': 'Where to distribute?',
+    'wiz-step3-sub': 'Step 3 of 6',
+    'wiz-step4-title': 'Quantity & date',
+    'wiz-step4-sub': 'Step 4 of 6',
+    'wiz-step5-title': 'Payment & requirements',
+    'wiz-step5-sub': 'Step 5 of 6',
+    'wiz-step6-title': 'Almost done!',
+    'wiz-step6-sub': 'Step 6 of 6',
+    'wiz-submit': '📨 Send task',
+
+    // Report modal
+    'report-title': '📸 Photo report',
+    'report-photo-label': '📸 Photo from distribution point',
+    'report-comment-label': '💬 Comment',
+    'report-cancel': 'Cancel',
+    'report-submit': '✅ Send report',
+
+    // Payment modal
+    'pay-title': '💳 Task payment',
+    'pay-liqpay': 'Pay via LiqPay',
+    'pay-mono': 'Pay via Monobank',
+    'pay-invoice-title': '📧 Get invoice by email',
+    'pay-invoice-sub': 'Enter email — we send invoice with IBAN',
+    'pay-invoice-btn': '📨 Send invoice request',
+
+    // Admin
+    'admin-title': '👑 Admin panel',
+    'admin-enter': 'Enter',
+    'admin-panel-title': '📊 Admin panel',
+    'admin-close': 'Close',
+    'admin-payments': '💰 Payment requests',
+    'admin-confirm-pay': '✅ Confirm payment',
+
+    // City modal
+    'city-title': '🏙️ Choose city',
+    'district-title': '🏘️ Choose district',
+    'city-cancel': 'Cancel',
+
+    // Advantages modals
+    'adv-no-mid-title': '🚀 No middlemen',
+    'adv-geo-title': '📍 GPS-verified report',
+    'adv-print-title': '⭐ Print materials',
+    'adv-fast-title': '⚡ Fast launch',
+    'adv-try-btn': '🚀 Try now',
+    'adv-order-btn': '📍 Order with photo report',
+    'adv-print-btn': '⭐ Order print + distribution',
+    'adv-launch-btn': '⚡ Launch campaign',
+  }
+};
+
+var currentLang = 'ukr';
+
 window.setLang = function(lang) {
+  currentLang = lang;
+  var t = translations[lang];
+
+  // Хедер
   document.getElementById('langUkr').style.background = lang==='ukr' ? 'linear-gradient(135deg,#005BBB,#FFD500)' : '#222';
   document.getElementById('langUkr').style.border = lang==='ukr' ? 'none' : '2px solid #444';
   document.getElementById('langEng').style.background = lang==='eng' ? 'linear-gradient(135deg,#012169,#C8102E)' : '#222';
   document.getElementById('langEng').style.border = lang==='eng' ? 'none' : '2px solid #444';
-  alert(lang==='eng' ? '🇬🇧 English version coming soon!' : '🇺🇦 Українська мова активна');
+
+  // Навігація
+  document.getElementById('loginBtn').textContent = t['nav-login'];
+  document.getElementById('workerBtn').textContent = t['nav-worker'];
+
+  // Hero
+  var badge = document.querySelector('.badge span:last-child'); if(badge) badge.innerHTML = t['hero-badge'];
+  var heroTitle = document.querySelector('.hero h1'); if(heroTitle) heroTitle.innerHTML = t['hero-title'];
+  var heroSub = document.querySelector('.hero p'); if(heroSub) heroSub.innerHTML = t['hero-sub'];
+  document.getElementById('ctaBtn').textContent = t['hero-cta'];
+
+  // Sidebar
+  var sideTitle = document.querySelector('.sidebar h2'); if(sideTitle) sideTitle.textContent = t['sidebar-title'];
+  var sbtns = document.querySelectorAll('.service-btn');
+  var sbkeys = ['sb-flyers','sb-aktsii','sb-print','sb-kupony','sb-probnyky','sb-gazety','sb-inshe'];
+  sbtns.forEach((b,i) => { if(sbkeys[i]) b.textContent = t[sbkeys[i]]; });
+
+  // Секції
+  var howTitle = document.querySelector('#service-default .section-title'); if(howTitle) howTitle.textContent = t['sec-how-title'];
+  var cards = document.querySelectorAll('#service-default .card');
+  if(cards[0]){ cards[0].querySelector('h3').textContent=t['card1-title']; cards[0].querySelector('p').textContent=t['card1-text']; }
+  if(cards[1]){ cards[1].querySelector('h3').textContent=t['card2-title']; cards[1].querySelector('p').textContent=t['card2-text']; }
+  if(cards[2]){ cards[2].querySelector('h3').textContent=t['card3-title']; cards[2].querySelector('p').textContent=t['card3-text']; }
+  if(cards[3]){ cards[3].querySelector('h3').textContent=t['card4-title']; cards[3].querySelector('p').textContent=t['card4-text']; }
+
+  var advs = document.querySelectorAll('.adv');
+  ['adv1','adv2','adv3','adv4'].forEach((k,i) => { if(advs[i]) advs[i].textContent=t[k]; });
+
+  // Футер
+  var footerCopy = document.querySelector('footer p'); if(footerCopy) footerCopy.textContent=t['footer-copy'];
+  var footerLinks = document.querySelectorAll('footer a');
+  if(footerLinks[0]) footerLinks[0].textContent=t['footer-privacy'];
+  if(footerLinks[1]) footerLinks[1].textContent=t['footer-terms'];
+  if(footerLinks[3]) footerLinks[3].textContent=t['footer-admin'];
+
+  // Кабінет замовника
+  var cabTitle = document.querySelector('#cabinetPage h2'); if(cabTitle) cabTitle.textContent=t['cab-title'];
+  var cabLogout = document.getElementById('logoutBtn'); if(cabLogout) cabLogout.textContent=t['cab-logout'];
+  var cabStats = document.querySelectorAll('#cabinetPage .stat-card div:last-child');
+  if(cabStats[0]) cabStats[0].textContent=t['cab-active'];
+  if(cabStats[1]) cabStats[1].textContent=t['cab-done'];
+  var cabTasksTitle = document.querySelector('#cabinetPage h3'); if(cabTasksTitle) cabTasksTitle.textContent=t['cab-tasks'];
+  var newTaskBtn = document.getElementById('newTaskBtn'); if(newTaskBtn) newTaskBtn.textContent=t['cab-new-task'];
+
+  // Кабінет роздавальника
+  var wcabTitle = document.querySelector('#workerCabinetPage h2'); if(wcabTitle) wcabTitle.textContent=t['worker-cab-title'];
+  var wcabLogout = document.getElementById('workerLogoutBtn'); if(wcabLogout) wcabLogout.textContent=t['worker-logout'];
+  var wcabStats = document.querySelectorAll('#workerCabinetPage .stat-card div:last-child');
+  if(wcabStats[0]) wcabStats[0].textContent=t['worker-taken'];
+  if(wcabStats[1]) wcabStats[1].textContent=t['worker-done'];
+  var profileTitle = document.querySelector('.profile-box h3'); if(profileTitle) profileTitle.textContent=t['profile-title'];
+  var profileSave = document.querySelector('.profile-box button'); if(profileSave) profileSave.textContent=t['profile-save'];
+  var profileLabels = document.querySelectorAll('.profile-box .field-label');
+  if(profileLabels[0]) profileLabels[0].textContent=t['profile-name-label'];
+  if(profileLabels[1]) profileLabels[1].textContent=t['profile-phone-label'];
+  if(profileLabels[2]) profileLabels[2].textContent=t['profile-iban-label'];
+  var workerTasksTitle = document.querySelector('#workerCabinetPage h3:last-of-type'); if(workerTasksTitle) workerTasksTitle.textContent=t['tasks-title'];
+
+  // Модалка замовника
+  var authTitle = document.querySelector('#authModal h3'); if(authTitle) authTitle.textContent=t['auth-title'];
+  var authSub = document.querySelector('#authModal .modal-sub'); if(authSub) authSub.textContent=t['auth-sub'];
+  var authCancel = document.getElementById('closeModalBtn'); if(authCancel) authCancel.textContent=t['auth-cancel'];
+  var authSubmit = document.getElementById('submitAuthBtn'); if(authSubmit) authSubmit.textContent=t['auth-submit'];
+
+  // Модалка роздавальника
+  var wAuthTitle = document.querySelector('#workerAuthModal h3'); if(wAuthTitle) wAuthTitle.textContent=t['worker-auth-title'];
+  var wAuthSub = document.querySelector('#workerAuthModal .modal-sub'); if(wAuthSub) wAuthSub.textContent=t['worker-auth-sub'];
+  var wAuthCancel = document.getElementById('closeWorkerAuthBtn'); if(wAuthCancel) wAuthCancel.textContent=t['worker-auth-cancel'];
+  var wAuthSubmit = document.getElementById('submitWorkerAuthBtn'); if(wAuthSubmit) wAuthSubmit.textContent=t['worker-auth-submit'];
+
+  // Секції послуг
+  function tr(sel, key) { var el=document.querySelector(sel); if(el && t[key]) el.textContent=t[key]; }
+  function trHTML(sel, key) { var el=document.querySelector(sel); if(el && t[key]) el.innerHTML=t[key]; }
+  function trAll(sel, key) { document.querySelectorAll(sel).forEach(el=>{ if(t[key]) el.textContent=t[key]; }); }
+
+  // Флаєри
+  tr('#service-flyers h2', 'flyers-title');
+  tr('#service-flyers>p', 'flyers-sub');
+
+  // Акції
+  tr('#service-aktsii h2', 'aktsii-title');
+  tr('#service-aktsii>p', 'aktsii-sub');
+  tr('#service-aktsii .cta-banner h3', 'aktsii-cta-title');
+  tr('#service-aktsii .cta-banner p', 'aktsii-cta-sub');
+  tr('#service-aktsii .cta-banner button', 'aktsii-cta-btn');
+
+  // Печатна
+  tr('#service-print h2', 'print-title');
+  tr('#service-print>p', 'print-sub');
+  tr('#service-print .cta-banner h3', 'print-cta-title');
+  tr('#service-print .cta-banner button', 'print-cta-btn');
+
+  // Купони
+  tr('#service-kupony h2', 'kupony-title');
+  tr('#service-kupony>p', 'kupony-sub');
+  tr('#service-kupony .cta-banner h3', 'kupony-cta-title');
+  tr('#service-kupony .cta-banner button', 'kupony-cta-btn');
+
+  // Пробники
+  tr('#service-probnyky h2', 'probnyky-title');
+  tr('#service-probnyky>p', 'probnyky-sub');
+  tr('#service-probnyky .cta-banner h3', 'probnyky-cta-title');
+  tr('#service-probnyky .cta-banner button', 'probnyky-cta-btn');
+
+  // Газети
+  tr('#service-gazety h2', 'gazety-title');
+  tr('#service-gazety>p', 'gazety-sub');
+  tr('#service-gazety .cta-banner h3', 'gazety-cta-title');
+  tr('#service-gazety .cta-banner button', 'gazety-cta-btn');
+
+  // Інше
+  tr('#service-inше h2', 'inshe-title');
+  tr('#service-inше>p', 'inshe-sub');
+  tr('#service-inше .cta-banner h3', 'inshe-cta-title');
+  tr('#service-inше .cta-banner button', 'inshe-cta-btn');
+
+  // Wizard
+  tr('#wStep1 h3', 'wiz-step1-title');
+  tr('#wStep1 .modal-sub', 'wiz-step1-sub');
+  tr('#wStep2 h3', 'wiz-step2-title');
+  tr('#wStep2 .modal-sub', 'wiz-step2-sub');
+  tr('#wStep3 h3', 'wiz-step3-title');
+  tr('#wStep3 .modal-sub', 'wiz-step3-sub');
+  tr('#wStep4 h3', 'wiz-step4-title');
+  tr('#wStep4 .modal-sub', 'wiz-step4-sub');
+  tr('#wStep5 h3', 'wiz-step5-title');
+  tr('#wStep5 .modal-sub', 'wiz-step5-sub');
+  tr('#wStep6 h3', 'wiz-step6-title');
+  tr('#wStep6 .modal-sub', 'wiz-step6-sub');
+  tr('#submitTaskBtn', 'wiz-submit');
+
+  // Модалка звіту
+  tr('#reportModal h3', 'report-title');
+  tr('#submitReportBtn', 'report-submit');
+  tr('#closeReportBtn', 'report-cancel');
+
+  // Модалка оплати
+  tr('#paymentModal h3', 'pay-title');
+  tr('#paymentModal .pay-option:last-child div:first-child', 'pay-invoice-title');
+  tr('#paymentModal .pay-option:last-child div:nth-child(2)', 'pay-invoice-sub');
+
+  // Адмін
+  tr('#adminModal h3', 'admin-title');
+  tr('#submitAdminBtn', 'admin-enter');
+  tr('#adminPanelModal h3', 'admin-panel-title');
+  tr('#closeAdminPanelBtn', 'admin-close');
+
+  // Модалки переваг
+  tr('#modal-no-middlemen h3', 'adv-no-mid-title');
+  tr('#modal-geo-report h3', 'adv-geo-title');
+  tr('#modal-print h3', 'adv-print-title');
+  tr('#modal-fast-launch h3', 'adv-fast-title');
+
+  // Місто / район
+  tr('#cityModal h3', 'city-title');
+  tr('#districtModal h3', 'district-title');
 };
 
 // INIT
