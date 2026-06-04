@@ -15,16 +15,16 @@ a{text-decoration:none;color:inherit}
 header{width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;position:sticky;top:0;z-index:1000;background:rgba(0,0,0,0.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,0.08);box-sizing:border-box}
 .logo{font-size:1.5rem;font-weight:900;color:var(--orange);text-transform:uppercase;letter-spacing:1px;white-space:nowrap}
 .header-btns{display:flex;gap:8px;flex-shrink:0}
-.btn-primary{background:linear-gradient(135deg,var(--orange),var(--red));color:#fff;padding:9px 14px;border-radius:12px;font-weight:800;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:0.8rem;transition:.2s;white-space:nowrap}
+.btn-primary{background:linear-gradient(135deg,var(--orange),var(--red));color:#fff;padding:8px 12px;border-radius:10px;font-weight:800;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:0.75rem;transition:.2s;white-space:nowrap}
 .btn-primary:hover{transform:translateY(-2px)}
-.btn-outline{background:transparent;color:var(--orange);padding:9px 14px;border-radius:12px;font-weight:800;border:2px solid var(--orange);cursor:pointer;font-family:'Montserrat',sans-serif;font-size:0.8rem;transition:.2s;white-space:nowrap}
+.btn-outline{background:transparent;color:var(--orange);padding:8px 12px;border-radius:10px;font-weight:800;border:2px solid var(--orange);cursor:pointer;font-family:'Montserrat',sans-serif;font-size:0.75rem;transition:.2s;white-space:nowrap}
 .btn-outline:hover{background:rgba(255,94,0,0.12)}
 .burger{display:none;flex-direction:column;gap:5px;cursor:pointer}
 .burger span{width:26px;height:3px;background:#fff;border-radius:10px}
 #menu-toggle{display:none}
 
 /* HERO */
-.hero{padding:70px 16px 50px;background:radial-gradient(circle at top left,rgba(255,94,0,.25),transparent 30%),radial-gradient(circle at bottom right,rgba(255,0,0,.18),transparent 30%),var(--dark)}
+.hero{padding:60px 16px 50px;overflow:hidden;background:radial-gradient(circle at top left,rgba(255,94,0,.25),transparent 30%),radial-gradient(circle at bottom right,rgba(255,0,0,.18),transparent 30%),var(--dark)}
 .hero h1{font-size:clamp(2rem,6vw,5.5rem);line-height:1.05;font-weight:900;text-transform:uppercase;margin-bottom:20px;word-break:break-word}
 .hero h1 span{color:var(--orange)}
 .hero p{font-size:1.1rem;color:var(--gray);line-height:1.6;margin-bottom:32px;max-width:600px}
@@ -34,7 +34,7 @@ header{width:100%;display:flex;align-items:center;justify-content:space-between;
 .btn-cta:hover{transform:translateY(-3px)}
 
 /* LAYOUT */
-.layout{display:grid;grid-template-columns:260px 1fr;gap:24px;padding:24px 16px 60px;box-sizing:border-box;width:100%}
+.layout{display:grid;grid-template-columns:260px 1fr;gap:24px;padding:24px 16px 60px;box-sizing:border-box;width:100%;overflow-x:hidden}
 .sidebar{background:var(--dark2);border-radius:24px;padding:24px 18px;position:sticky;top:80px;height:max-content;border:1px solid rgba(255,255,255,.05)}
 .sidebar h2{font-size:1.5rem;color:var(--orange);font-weight:900;margin-bottom:18px}
 .service-list{display:flex;flex-direction:column;gap:10px}
@@ -186,7 +186,7 @@ footer a:hover{color:var(--orange)}
 </header>
 
 <!-- HERO -->
-<section class="hero" id="publicLayout">
+<section class="hero" id="publicLayout" style="width:100%;box-sizing:border-box">
   <div class="badge"><span class="badge-dot"></span><span style="font-size:.85rem;font-weight:800">Промоутерів <span style="color:var(--orange)">500+</span> вже на платформі</span></div>
   <h1><span>FlyerDrop</span> — Реклама, яка розходиться в руки</h1>
   <p>Флаєри, акції, пробники, друк — підберемо роздавальників за 5 хвилин. Запускай рекламні кампанії швидко та без зайвих посередників.</p>
