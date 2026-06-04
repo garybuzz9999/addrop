@@ -998,9 +998,15 @@ document.getElementById('logoutBtn').onclick = function() {
 document.getElementById('newTaskBtn').onclick = wizardOpen;
 
 document.getElementById('submitAuthBtn').onclick = function() {
-  var phone = document.getElementById('phoneInput').value.trim();
-  if (!phone) { alert('Введіть номер телефону'); return; }
-  currentUser = { id: 'u_'+Date.now(), phone: phone, userType: document.getElementById('userType').value, city: document.getElementById('cityInput').value||'Козятин' };
+  var phone   = document.getElementById('phoneInput').value.trim();
+  var city    = document.getElementById('cityInput').value.trim();
+  var address = document.getElementById('addressInput').value.trim();
+  var errors = [];
+  if (!phone)   errors.push('📱 Телефон');
+  if (!city)    errors.push('📍 Місто');
+  if (!address) errors.push('🏠 Адреса');
+  if (errors.length) { alert('Заповніть обов'язкові поля:\n' + errors.join('\n')); return; }
+  currentUser = { id: 'u_'+Date.now(), phone: phone, userType: document.getElementById('userType').value, city: city, address: address };
   closeModal(authModal);
   updateUI();
 };
@@ -1010,22 +1016,34 @@ document.getElementById('appleBtn').onclick = function() { alert('🍎 Apple в�
 
 // WORKER AUTH
 document.getElementById('closeWorkerAuthBtn').onclick = function() { closeModal(workerAuthModal); };
-document.getElementById('submitWorkerAuthBtn').onclick = function() {
+document.getElementById('submitWorkerAuthBtn').onclick = async function() {
   var phone = document.getElementById('workerPhone').value.trim();
-  if (!phone) { alert('Введіть номер телефону'); return; }
-  currentWorker = { id: 'w_'+Date.now(), phone: phone, name: document.getElementById('workerName').value.trim()||phone, city: document.getElementById('workerCity').value||'Козятин', district: document.getElementById('workerDistrict').value };
+  var name  = document.getElementById('workerName').value.trim();
+  var city  = document.getElementById('workerCity').value.trim();
+  var district = document.getElementById('workerDistrict').value.trim();
+  var errors = [];
+  if (!phone)    errors.push('📱 Телефон');
+  if (!name)     errors.push('👤 Ім'я');
+  if (!city)     errors.push('📍 Місто');
+  if (!district) errors.push('🏘️ Район');
+  if (errors.length) { alert('Заповніть обов'язкові поля:\n' + errors.join('\n')); return; }
+  currentWorker = { id: 'w_'+Date.now(), phone: phone, name: name, city: city, district: district };
+  try { await fsAdd('workers', {...currentWorker, registeredAt: new Date().toISOString()}); } catch(e) {}
   closeModal(workerAuthModal);
   currentUser = null;
   updateUI();
+  loadWorkerCount();
 };
 document.getElementById('workerGoogleBtn').onclick = function() {
   if (window.googleSignIn) {
-    window.googleSignIn().then(function() {
+    window.googleSignIn().then(async function() {
       if (window.fbUser) {
         currentWorker = { id: window.fbUser.id, phone: window.fbUser.email, name: window.fbUser.name, city: 'Козятин' };
+        try { await fsAdd('workers', {...currentWorker, registeredAt: new Date().toISOString()}); } catch(e) {}
         currentUser = null;
         closeModal(workerAuthModal);
         updateUI();
+        loadWorkerCount();
       }
     });
   }
