@@ -189,7 +189,7 @@ footer a:hover{color:var(--orange)}
 
 <!-- HERO -->
 <section class="hero" id="publicLayout">
-  <div class="badge"><span class="badge-dot"></span><span style="font-size:.85rem;font-weight:800">Промоутерів <span style="color:var(--orange)">500+</span> вже на платформі</span></div>
+  <div class="badge"><span class="badge-dot"></span><span style="font-size:.85rem;font-weight:800">Промоутерів <span style="color:var(--orange)" id="workerCountBadge">...</span> вже на платформі</span></div>
   <h1><span>FlyerDrop</span> — Реклама, яка розходиться в руки</h1>
   <p>Флаєри, акції, пробники, друк — підберемо роздавальників за 5 хвилин. Запускай рекламні кампанії швидко та без зайвих посередників.</p>
   <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:0">
@@ -1219,7 +1219,7 @@ var translations = {
   ukr: {
     'nav-login': 'Замовник',
     'nav-worker': '🙋 Роздавальник',
-    'hero-badge': 'Промоутерів <span style="color:var(--orange)">500+</span> вже на платформі',
+    'hero-badge': 'Промоутерів <span style="color:var(--orange)" id="workerCountBadge">...</span> вже на платформі',
     'hero-title': '<span>FlyerDrop</span> — Реклама, яка розходиться в руки',
     'hero-sub': 'Флаєри, акції, пробники, друк — підберемо роздавальників за 5 хвилин. Запускай рекламні кампанії швидко та без зайвих посередників.',
     'hero-cta': 'Створити завдання',
@@ -1410,7 +1410,7 @@ var translations = {
   eng: {
     'nav-login': 'Client',
     'nav-worker': '🙋 Distributor',
-    'hero-badge': 'Promoters <span style="color:var(--orange)">500+</span> already on platform',
+    'hero-badge': 'Promoters <span style="color:var(--orange)" id="workerCountBadge">...</span> already on platform',
     'hero-title': '<span>FlyerDrop</span> — Advertising that reaches hands',
     'hero-sub': 'Flyers, promos, samples, print — we find distributors in 5 minutes. Launch ad campaigns fast and without middlemen.',
     'hero-cta': 'Create task',
@@ -1819,6 +1819,24 @@ window.setLang = function(lang) {
 
 // INIT
 updateUI();
+
+// LOAD REAL WORKER COUNT
+async function loadWorkerCount() {
+  try {
+    if (!window.DB || !window.FS) { setTimeout(loadWorkerCount, 1000); return; }
+    var snap = await window.FS.getDocs(window.FS.collection(window.DB, 'workers'));
+    var count = snap.size || 0;
+    var display = count < 10 ? count : (Math.floor(count / 10) * 10) + '+';
+    document.querySelectorAll('#workerCountBadge').forEach(function(el) {
+      el.textContent = display || '0';
+    });
+  } catch(e) {
+    document.querySelectorAll('#workerCountBadge').forEach(function(el) {
+      el.textContent = '0';
+    });
+  }
+}
+loadWorkerCount();
 // Відновлюємо мову
 try { var savedLang = localStorage.getItem('fdLang'); if(savedLang) window.setLang(savedLang); } catch(e) {}
 </script>
