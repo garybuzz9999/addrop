@@ -404,12 +404,7 @@ footer a:hover{color:var(--orange)}
     </div>
     <div class="form-group"><label>📱 Телефон</label><input type="tel" id="phoneInput" placeholder="+38 (0__) ___ __ __"></div>
     <div class="form-group"><label>Тип особи</label><select id="userType"><option value="private">Приватна особа</option><option value="fop">ФОП</option><option value="company">ТОВ / Компанія</option></select></div>
-    <div class="form-group"><label>📍 Місто</label>
-      <button type="button" class="city-btn" id="clientCityBtn" onclick="openModal(document.getElementById('clientCityModal'))">
-        <span id="clientCityLabel">🏙️ Оберіть місто</span><span style="color:#666">›</span>
-      </button>
-      <input type="hidden" id="cityInput">
-    </div>
+    <div class="form-group"><label>📍 Місто</label><input type="text" id="cityInput" value="Козятин"></div>
     <div class="form-group"><label>🏠 Адреса</label><input type="text" id="addressInput" placeholder="Вулиця, будинок"></div>
     <div class="modal-footer">
       <button class="btn-modal-secondary" id="closeModalBtn">Скасувати</button>
@@ -663,18 +658,6 @@ footer a:hover{color:var(--orange)}
   </div>
 </div>
 
-<!-- CLIENT CITY MODAL -->
-<div class="modal-overlay" id="clientCityModal" style="z-index:5000">
-  <div class="modal" style="max-width:380px">
-    <h3>🏙️ Оберіть місто</h3>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px">
-      <button onclick="selectClientCity('Київ')" class="city-select-btn">🏙️ Київ</button>
-      <div style="padding:12px;border-radius:10px;background:#1a1a1a;color:#555;font-size:0.88rem;text-align:center">Інші міста — незабаром</div>
-    </div>
-    <div class="modal-footer"><button class="btn-modal-secondary" onclick="closeModal(document.getElementById('clientCityModal'))">Скасувати</button></div>
-  </div>
-</div>
-
 <!-- PRIVACY POLICY MODAL -->
 <div class="modal-overlay" id="privacyModal" style="z-index:6000">
   <div class="modal-box" style="max-width:600px;max-height:80vh;overflow-y:auto">
@@ -698,6 +681,18 @@ footer a:hover{color:var(--orange)}
 </footer>
 
 <script>
+// ===== MODAL REFS =====
+var authModal, workerAuthModal, taskModal, reportModal, paymentModal, adminModal, adminPanelModal;
+document.addEventListener('DOMContentLoaded', function() {
+  authModal       = document.getElementById('authModal');
+  workerAuthModal = document.getElementById('workerAuthModal');
+  taskModal       = document.getElementById('taskModal');
+  reportModal     = document.getElementById('reportModal');
+  paymentModal    = document.getElementById('paymentModal');
+  adminModal      = document.getElementById('adminModal');
+  adminPanelModal = document.getElementById('adminPanelModal');
+});
+
 // ===== FIREBASE =====
 (async function() {
   try {
@@ -1015,15 +1010,9 @@ document.getElementById('logoutBtn').onclick = function() {
 document.getElementById('newTaskBtn').onclick = wizardOpen;
 
 document.getElementById('submitAuthBtn').onclick = function() {
-  var phone   = document.getElementById('phoneInput').value.trim();
-  var city    = document.getElementById('cityInput').value.trim();
-  var address = document.getElementById('addressInput').value.trim();
-  var errors = [];
-  if (!phone)   errors.push('📱 Телефон');
-  if (!city)    errors.push('📍 Місто — оберіть зі списку');
-  if (!address) errors.push('🏠 Адреса');
-  if (errors.length) { alert('Заповніть обов'язкові поля:\n' + errors.join('\n')); return; }
-  currentUser = { id: 'u_'+Date.now(), phone: phone, userType: document.getElementById('userType').value, city: city, address: address };
+  var phone = document.getElementById('phoneInput').value.trim();
+  if (!phone) { alert('Введіть номер телефону'); return; }
+  currentUser = { id: 'u_'+Date.now(), phone: phone, userType: document.getElementById('userType').value, city: document.getElementById('cityInput').value||'Козятин' };
   closeModal(authModal);
   updateUI();
 };
@@ -1033,34 +1022,22 @@ document.getElementById('appleBtn').onclick = function() { alert('🍎 Apple в�
 
 // WORKER AUTH
 document.getElementById('closeWorkerAuthBtn').onclick = function() { closeModal(workerAuthModal); };
-document.getElementById('submitWorkerAuthBtn').onclick = async function() {
+document.getElementById('submitWorkerAuthBtn').onclick = function() {
   var phone = document.getElementById('workerPhone').value.trim();
-  var name  = document.getElementById('workerName').value.trim();
-  var city  = document.getElementById('workerCity').value.trim();
-  var district = document.getElementById('workerDistrict').value.trim();
-  var errors = [];
-  if (!phone)    errors.push('📱 Телефон');
-  if (!name)     errors.push('👤 Ім'я');
-  if (!city)     errors.push('📍 Місто');
-  if (!district) errors.push('🏘️ Район');
-  if (errors.length) { alert('Заповніть обов'язкові поля:\n' + errors.join('\n')); return; }
-  currentWorker = { id: 'w_'+Date.now(), phone: phone, name: name, city: city, district: district };
-  try { await fsAdd('workers', {...currentWorker, registeredAt: new Date().toISOString()}); } catch(e) {}
+  if (!phone) { alert('Введіть номер телефону'); return; }
+  currentWorker = { id: 'w_'+Date.now(), phone: phone, name: document.getElementById('workerName').value.trim()||phone, city: document.getElementById('workerCity').value||'Козятин', district: document.getElementById('workerDistrict').value };
   closeModal(workerAuthModal);
   currentUser = null;
   updateUI();
-  loadWorkerCount();
 };
 document.getElementById('workerGoogleBtn').onclick = function() {
   if (window.googleSignIn) {
-    window.googleSignIn().then(async function() {
+    window.googleSignIn().then(function() {
       if (window.fbUser) {
         currentWorker = { id: window.fbUser.id, phone: window.fbUser.email, name: window.fbUser.name, city: 'Козятин' };
-        try { await fsAdd('workers', {...currentWorker, registeredAt: new Date().toISOString()}); } catch(e) {}
         currentUser = null;
         closeModal(workerAuthModal);
         updateUI();
-        loadWorkerCount();
       }
     });
   }
@@ -1191,13 +1168,6 @@ document.getElementById('closeAdminPanelBtn').onclick = function() { closeModal(
 var cityDistricts = {
   'Київ': ['Весь Київ','Голосіївський','Дарницький','Деснянський','Дніпровський','Оболонський','Печерський','Подільський','Святошинський','Соломянський','Шевченківський']
 };
-window.selectClientCity = function(city) {
-  document.getElementById('cityInput').value = city;
-  document.getElementById('clientCityLabel').textContent = '🏙️ ' + city;
-  document.getElementById('clientCityLabel').style.color = '#fff';
-  closeModal(document.getElementById('clientCityModal'));
-};
-
 window.selectCity = function(city) {
   document.getElementById('workerCity').value = city;
   document.getElementById('workerCityLabel').textContent = '🏙️ ' + city;
