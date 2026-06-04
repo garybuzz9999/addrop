@@ -665,9 +665,7 @@ footer a:hover{color:var(--orange)}
       <!-- rendered by JS -->
     </div>
     <div class="modal-footer">
-      <button class="btn-modal-primary" onclick="closeModal(document.getElementById('privacyModal'))">
-        <span data-lang="uk">Закрити</span><span data-lang="en" style="display:none">Close</span>
-      </button>
+      <button class="btn-modal-primary" id="privacyCloseBtn" onclick="closeModal(document.getElementById('privacyModal'))">Закрити</button>
     </div>
   </div>
 </div>
@@ -1121,6 +1119,7 @@ function renderPrivacy(lang) {
     }
   });
   document.getElementById('privacyContent').innerHTML = html;
+  document.getElementById('privacyCloseBtn').textContent = (lang === 'en') ? 'Close' : 'Закрити';
 }
 document.getElementById('privacyLink').onclick = function(e) {
   e.preventDefault();
